@@ -1,6 +1,10 @@
 
 describe "Board" do
 
+  # TODO: check invalid positions
+  # TODO: position cache
+  # TODO: board shallow copy
+
   it "should return each object" do
     board = Chessmonger::Board.new 8, 8
     contents = [

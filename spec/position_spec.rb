@@ -1,6 +1,8 @@
 
 describe 'Position' do
 
+  # TODO: check that coordinates are Fixnum
+
   it "should be initializable with x and y coordinates" do
     lambda{ Chessmonger::Position.new 2, 3 }.should_not raise_error
     lambda{ Chessmonger::Position.new 123, 456 }.should_not raise_error

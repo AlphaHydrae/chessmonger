@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
+    "chessmonger.gemspec",
     "lib/chessmonger.rb",
     "spec/helper.rb",
     "spec/version_spec.rb"

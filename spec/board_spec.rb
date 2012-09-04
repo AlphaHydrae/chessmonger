@@ -13,29 +13,29 @@ describe "Board" do
     end
     n = 0
     board.each do |o|
-      contents.delete contents.select{ |op| op[0] === o }
+      contents.delete_if{ |op| op[0] === o }
       n += 1
     end
     n.should == 3
     contents.should be_empty
   end
 
-  describe "placement method" do
+  describe "placement methods" do
 
     before :each do
-      @board = Chessmonger::Board.new
+      @board = Chessmonger::Board.new 8, 8
       @object = Object.new
       @pos = Chessmonger::Position.new 2, 3
     end
 
-    describe "#get" do
+    describe "get" do
 
       it "should not return anything from an empty board" do
         @board.get(@pos).should be_nil
       end
     end
 
-    describe "#put" do
+    describe "put" do
 
       it "should put objects where specified" do
         @board.put @object, @pos
@@ -60,7 +60,7 @@ describe "Board" do
       end
     end
 
-    describe "#take" do
+    describe "take" do
 
       it "should remove objects from the board" do
         @board.put @object, @pos
@@ -74,7 +74,7 @@ describe "Board" do
       end
     end
 
-    describe "#move" do
+    describe "move" do
 
       before :each do
         @target = Chessmonger::Position.new 4, 5

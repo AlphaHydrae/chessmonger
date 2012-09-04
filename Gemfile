@@ -11,4 +11,5 @@ group :development do
   gem 'rspec'
   gem 'jeweler'
   gem 'rake-version'
+  gem 'simplecov'
 end

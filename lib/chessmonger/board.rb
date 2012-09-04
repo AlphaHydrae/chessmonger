@@ -6,6 +6,7 @@ module Chessmonger
     def initialize width, height
       raise 'Width must be an integer greater than zero' unless width.kind_of?(Fixnum) and width >= 1
       raise 'Height must be an integer greater than zero' unless height.kind_of?(Fixnum) and height >= 1
+      @width, @height = width, height
       @contents = Array.new(width * height)
     end
 
@@ -39,7 +40,7 @@ module Chessmonger
     private
 
     def index pos
-      pos.x * (pos.y - 1) + pos.x - 1
+      @width * (pos.y - 1) + pos.x - 1
     end
   end
 end

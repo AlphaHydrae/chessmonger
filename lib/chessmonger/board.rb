@@ -44,6 +44,7 @@ module Chessmonger
     end
 
     def pos x, y
+      return nil if x < 1 or y < 1
       @positions[index(x, y)]
     end
 

@@ -39,8 +39,8 @@ describe 'Direction' do
 
     it "should move the specified distance" do
       Chessmonger::Direction.new(1, -1).from(@board, @pos, 2).tap do |pos|
-        pos.x.should == 2
-        pos.y.should == 6
+        pos.x.should == 6
+        pos.y.should == 2
       end
     end
   end

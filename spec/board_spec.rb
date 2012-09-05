@@ -2,15 +2,61 @@
 describe "Board" do
 
   # TODO: check invalid positions
-  # TODO: position cache
   # TODO: board shallow copy
+
+  describe "positions" do
+
+    it "should be singletons" do
+
+      board = Chessmonger::Board.new 8, 8
+
+      Chessmonger::Position.stub :new
+      Chessmonger::Position.should_not_receive :new
+
+      8.times do |x|
+        8.times do |y|
+          board.pos(x + 1, y + 1).should be(board.pos(x + 1, y + 1))
+        end
+      end
+    end
+
+    it "should all be different" do
+
+      board = Chessmonger::Board.new 8, 8
+
+      positions = []
+
+      8.times do |x|
+        8.times do |y|
+          pos = board.pos(x + 1, y + 1)
+          positions.should_not include(pos)
+          positions << pos
+        end
+      end
+    end
+
+    it "should all have different indices" do
+
+      board = Chessmonger::Board.new 8, 8
+
+      indices = []
+
+      8.times do |x|
+        8.times do |y|
+          pos = board.pos(x + 1, y + 1)
+          indices.should_not include(pos.index)
+          indices << pos.index
+        end
+      end
+    end
+  end
 
   it "should return each object" do
     board = Chessmonger::Board.new 8, 8
     contents = [
-      [ Object.new, Chessmonger::Position.new(1, 2) ],
-      [ Object.new, Chessmonger::Position.new(2, 3) ],
-      [ Object.new, Chessmonger::Position.new(4, 5) ]
+      [ Object.new, board.pos(1, 2) ],
+      [ Object.new, board.pos(2, 3) ],
+      [ Object.new, board.pos(4, 5) ]
     ]
     contents.each do |op|
       board.put op[0], op[1]
@@ -29,7 +75,7 @@ describe "Board" do
     before :each do
       @board = Chessmonger::Board.new 8, 8
       @object = Object.new
-      @pos = Chessmonger::Position.new 2, 3
+      @pos = @board.pos 2, 3
     end
 
     describe "get" do
@@ -81,7 +127,7 @@ describe "Board" do
     describe "move" do
 
       before :each do
-        @target = Chessmonger::Position.new 4, 5
+        @target = @board.pos 4, 5
       end
 
       it "should return nothing if the positions were empty" do
@@ -117,6 +163,12 @@ describe "Board" do
       lambda{ Chessmonger::Board.new(-1, 8) }.should raise_error
       lambda{ Chessmonger::Board.new(8, -2) }.should raise_error
       lambda{ Chessmonger::Board.new(-3, -4) }.should raise_error
+    end
+
+    it "should be the ones given at construction" do
+      board = Chessmonger::Board.new 8, 8
+      board.width.should == 8
+      board.height.should == 8
     end
   end
 end

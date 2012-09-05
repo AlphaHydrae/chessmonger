@@ -23,6 +23,54 @@ describe 'Direction' do
     end
   end
 
+  describe '::between' do
+
+    before :each do
+      @board = Chessmonger::Board.new 8, 8
+      @pos = @board.pos 4, 4
+    end
+    
+    it "should work for N" do
+      target = @board.pos 4, 6
+      Chessmonger::Direction.between(@pos, target).should be(Chessmonger::Direction::N)
+    end
+    
+    it "should work for NE" do
+      target = @board.pos 6, 6
+      Chessmonger::Direction.between(@pos, target).should be(Chessmonger::Direction::NE)
+    end
+    
+    it "should work for E" do
+      target = @board.pos 6, 4
+      Chessmonger::Direction.between(@pos, target).should be(Chessmonger::Direction::E)
+    end
+    
+    it "should work for SE" do
+      target = @board.pos 6, 2
+      Chessmonger::Direction.between(@pos, target).should be(Chessmonger::Direction::SE)
+    end
+    
+    it "should work for S" do
+      target = @board.pos 4, 2
+      Chessmonger::Direction.between(@pos, target).should be(Chessmonger::Direction::S)
+    end
+    
+    it "should work for SW" do
+      target = @board.pos 2, 2
+      Chessmonger::Direction.between(@pos, target).should be(Chessmonger::Direction::SW)
+    end
+    
+    it "should work for W" do
+      target = @board.pos 2, 4
+      Chessmonger::Direction.between(@pos, target).should be(Chessmonger::Direction::W)
+    end
+    
+    it "should work for NW" do
+      target = @board.pos 2, 6
+      Chessmonger::Direction.between(@pos, target).should be(Chessmonger::Direction::NW)
+    end
+  end
+
   describe '#from' do
     
     before :each do
@@ -41,6 +89,25 @@ describe 'Direction' do
       Chessmonger::Direction.new(1, -1).from(@board, @pos, 2).tap do |pos|
         pos.x.should == 6
         pos.y.should == 2
+      end
+    end
+  end
+
+  describe '#rotate' do
+
+    it "should rotate 45 degrees by default" do
+      dirs = [ :N, :NE, :E, :SE, :S, :SW, :W, :NW ]
+      dirs.each do |dir|
+        original = dirs.index dir
+        target = original == 7 ? dirs.first : dirs[original + 1]
+        expected = Chessmonger::Direction.const_get target.to_s
+        Chessmonger::Direction.const_get(dir.to_s).rotate.should be(expected)
+      end
+    end
+
+    it "should not work for non-cardinal directions" do
+      [ [ 0, 0 ], [ 1, 1 ], [ -1, 0 ], [ 1, 2 ], [ 2, 3 ], [ -4, 8 ], [ 3, -5 ], [ 8, 8 ] ].each do |invalid|
+        Chessmonger::Direction.new(invalid[0], invalid[1]).rotate.should be_nil
       end
     end
   end

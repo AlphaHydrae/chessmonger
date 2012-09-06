@@ -111,4 +111,20 @@ describe 'Game' do
       @game.history.should include(@a1)
     end
   end
+
+  describe '#player' do
+
+    it "should return the current player defined by the rules" do
+
+      @game = Chessmonger::Game.new @rules, @players
+
+      @rules.stub(:current_player => @p1)
+      @rules.should_receive(:current_player).with(@game)
+      @game.player.should be(@p1)
+
+      @rules.stub(:current_player => @p2)
+      @rules.should_receive(:current_player).with(@game)
+      @game.player.should be(@p2)
+    end
+  end
 end

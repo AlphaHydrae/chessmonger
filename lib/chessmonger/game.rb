@@ -24,5 +24,9 @@ module Chessmonger
     def cancel
       history.pop.cancel self
     end
+
+    def player
+      @rules.current_player self
+    end
   end
 end

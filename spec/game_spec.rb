@@ -50,7 +50,7 @@ describe 'Game' do
     end
 
     it "should create a board with the dimensions defined by the rules" do
-      Board.should_receive(:new).with(8, 8)
+      Chessmonger::Board.should_receive(:new).with(8, 8)
       game = Chessmonger::Game.new @rules, @players
       game.board.should be(@board)
     end

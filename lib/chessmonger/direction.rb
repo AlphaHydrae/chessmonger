@@ -23,6 +23,13 @@ module Chessmonger
       end
     end
 
+    def self.smallest_angle_between dir1, dir2
+      i1, i2 = ALL.index(dir1), ALL.index(dir2)
+      return nil unless i1 and i2
+      da = (i2 - i1).abs
+      da > 4 ? 8 - da : da
+    end
+
     def initialize dx, dy
       raise 'dx must be an integer' unless dx.kind_of? Fixnum
       raise 'dy must be an integer' unless dy.kind_of? Fixnum
@@ -49,8 +56,10 @@ module Chessmonger
     W = Direction.new -1, 0
     NW = Direction.new -1, 1
 
-    private
-
     ALL = [ N, NE, E, SE, S, SW, W, NW ]
+    HORIZONTAL = [ E, W ]
+    VERTICAL = [ N, S ]
+    STRAIGHT = [ N, E, S, W ]
+    DIAGONAL = [ NE, SE, SW, NW ]
   end
 end

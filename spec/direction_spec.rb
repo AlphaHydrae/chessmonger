@@ -2,6 +2,7 @@
 describe 'Direction' do
 
   # TODO: check that #from does not run out of the board
+  # TODO: check that smallest_angle_between does not work with arbitrary directions
 
   it "should be initializable with two integer differentials" do
     lambda{ Chessmonger::Direction.new 4, 4 }.should_not raise_error
@@ -19,34 +20,39 @@ describe 'Direction' do
   end
 
   it "should provide the cardinal directions" do
-    Chessmonger::Direction::ALL.should == [
+    Chessmonger::Direction::ALL.should have(8).items
+    Chessmonger::Direction::ALL.should include(
       Chessmonger::Direction::N, Chessmonger::Direction::NE,
       Chessmonger::Direction::E, Chessmonger::Direction::SE,
       Chessmonger::Direction::S, Chessmonger::Direction::SW,
       Chessmonger::Direction::W, Chessmonger::Direction::NW
-    ]
+    )
   end
 
   it "should provide the horizontal directions" do
-    Chessmonger::Direction::HORIZONTAL.should == [ Chessmonger::Direction::E, Chessmonger::Direction::W ]
+    Chessmonger::Direction::HORIZONTAL.should have(2).items
+    Chessmonger::Direction::HORIZONTAL.should include(Chessmonger::Direction::E, Chessmonger::Direction::W)
   end
 
   it "should provide the vertical directions" do
-    Chessmonger::Direction::VERTICAL.should == [ Chessmonger::Direction::N, Chessmonger::Direction::S ]
+    Chessmonger::Direction::VERTICAL.should have(2).items
+    Chessmonger::Direction::VERTICAL.should include(Chessmonger::Direction::N, Chessmonger::Direction::S)
   end
 
   it "should provide the straight directions" do
-    Chessmonger::Direction::STRAIGHT.should == [
+    Chessmonger::Direction::STRAIGHT.should have(4).items
+    Chessmonger::Direction::STRAIGHT.should include(
       Chessmonger::Direction::N, Chessmonger::Direction::E,
       Chessmonger::Direction::S, Chessmonger::Direction::W
-    ]
+    )
   end
 
   it "should provide the diagonal directions" do
-    Chessmonger::Direction::DIAGONAL.should == [
+    Chessmonger::Direction::DIAGONAL.should have(4).items
+    Chessmonger::Direction::DIAGONAL.should include(
       Chessmonger::Direction::NE, Chessmonger::Direction::SE,
       Chessmonger::Direction::SW, Chessmonger::Direction::NW
-    ]
+    )
   end
 
   it "should provide all cardinal directions as constants" do

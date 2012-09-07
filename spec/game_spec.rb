@@ -1,6 +1,8 @@
 
 describe 'Game' do
 
+  # TODO: test captures
+
   before :each do
 
     @rules = double('rules')

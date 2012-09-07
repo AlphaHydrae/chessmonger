@@ -31,8 +31,6 @@ module Chessmonger
     end
 
     def initialize dx, dy
-      raise 'dx must be an integer' unless dx.kind_of? Fixnum
-      raise 'dy must be an integer' unless dy.kind_of? Fixnum
       @dx, @dy = dx, dy
     end
 

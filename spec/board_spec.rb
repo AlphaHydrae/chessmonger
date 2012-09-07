@@ -81,7 +81,11 @@ describe "Board" do
     describe "get" do
 
       it "should not return anything from an empty board" do
-        @board.get(@pos).should be_nil
+        8.times do |x|
+          8.times do |y|
+            @board.get(@board.pos x + 1, y + 1).should be_nil
+          end
+        end
       end
     end
 

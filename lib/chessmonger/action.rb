@@ -6,9 +6,6 @@ module Chessmonger
     attr_reader :player
 
     def initialize player
-    
-      raise "Player must be a #{Player.name} (got #{player.class.name})" unless player.kind_of?(Player)
-
       @player = player
     end
 

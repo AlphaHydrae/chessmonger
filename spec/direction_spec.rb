@@ -12,13 +12,6 @@ describe 'Direction' do
     lambda{ Chessmonger::Direction.new 0, 0 }.should_not raise_error
   end
 
-  it "should not accept non-integer arguments" do
-    [ nil, false, true, Object.new, [], {}, 'string', :symbol ].each do |invalid|
-      lambda{ Chessmonger::Direction.new invalid, 4 }.should raise_error
-      lambda{ Chessmonger::Direction.new 4, invalid }.should raise_error
-    end
-  end
-
   it "should provide the cardinal directions" do
     Chessmonger::Direction::ALL.should have(8).items
     Chessmonger::Direction::ALL.should include(

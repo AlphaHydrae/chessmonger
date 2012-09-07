@@ -1,8 +1,15 @@
+require 'ostruct'
 
 describe "Board" do
 
   # TODO: check invalid positions
   # TODO: board shallow copy
+
+  before :each do
+    Chessmonger::Position.stub :new do |x, y, i|
+      OpenStruct.new :x => x, :y => y, :index => i
+    end
+  end
 
   describe "positions" do
 
@@ -10,7 +17,6 @@ describe "Board" do
 
       board = Chessmonger::Board.new 8, 8
 
-      Chessmonger::Position.stub :new
       Chessmonger::Position.should_not_receive :new
 
       8.times do |x|

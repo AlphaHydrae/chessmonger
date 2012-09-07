@@ -3,10 +3,8 @@ describe 'Action' do
 
   before :each do
 
-    @player = double('player')
-    @player.stub(:name){ 'John Doe' }
-
-    @game = double('game')
+    @player = double :name => 'John Doe'
+    @game = double
   end
 
   it "should be initializable with a player" do

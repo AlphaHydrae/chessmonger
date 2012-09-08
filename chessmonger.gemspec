@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "chessmonger"
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
-  s.date = "2012-09-04"
+  s.date = "2012-09-08"
   s.description = "Extensible grid game engine in Ruby."
   s.email = "hydrae.alpha@gmail.com"
   s.extra_rdoc_files = [
@@ -28,13 +28,35 @@ Gem::Specification.new do |s|
     "VERSION",
     "chessmonger.gemspec",
     "lib/chessmonger.rb",
+    "lib/chessmonger/action.rb",
+    "lib/chessmonger/armory.rb",
+    "lib/chessmonger/board.rb",
+    "lib/chessmonger/direction.rb",
+    "lib/chessmonger/distance.rb",
+    "lib/chessmonger/game.rb",
+    "lib/chessmonger/move.rb",
+    "lib/chessmonger/piece.rb",
+    "lib/chessmonger/player.rb",
+    "lib/chessmonger/position.rb",
+    "lib/chessmonger/rules.rb",
+    "spec/action_spec.rb",
+    "spec/armory_spec.rb",
+    "spec/board_spec.rb",
+    "spec/direction_spec.rb",
+    "spec/distance_spec.rb",
+    "spec/game_spec.rb",
     "spec/helper.rb",
+    "spec/move_spec.rb",
+    "spec/piece_spec.rb",
+    "spec/player_spec.rb",
+    "spec/position_spec.rb",
+    "spec/rules_spec.rb",
     "spec/version_spec.rb"
   ]
   s.homepage = "http://github.com/AlphaHydrae/chessmonger"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.17"
+  s.rubygems_version = "1.8.24"
   s.summary = "Chess, Shogi and other variants."
 
   if s.respond_to? :specification_version then
@@ -46,12 +68,14 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, [">= 0"])
       s.add_development_dependency(%q<rake-version>, [">= 0"])
+      s.add_development_dependency(%q<simplecov>, [">= 0"])
     else
       s.add_dependency(%q<bundler>, [">= 0"])
       s.add_dependency(%q<rake>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<rake-version>, [">= 0"])
+      s.add_dependency(%q<simplecov>, [">= 0"])
     end
   else
     s.add_dependency(%q<bundler>, [">= 0"])
@@ -59,6 +83,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<rake-version>, [">= 0"])
+    s.add_dependency(%q<simplecov>, [">= 0"])
   end
 end
 

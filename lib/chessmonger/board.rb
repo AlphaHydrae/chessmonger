@@ -5,8 +5,8 @@ module Chessmonger
     attr_reader :width, :height
 
     def initialize width, height
-      raise 'Width must be greater than zero' unless width >= 1
-      raise 'Height must be greater than zero' unless height >= 1
+      raise ArgumentError, 'Width must be greater than zero' unless width >= 1
+      raise ArgumentError, 'Height must be greater than zero' unless height >= 1
 
       @width, @height, @length = width, height, width * height
 

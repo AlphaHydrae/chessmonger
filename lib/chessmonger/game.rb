@@ -7,7 +7,7 @@ module Chessmonger
 
     def initialize rules, players
 
-      raise "Rules require #{rules.number_of_players} players (got #{players.length})" unless players.length == rules.number_of_players
+      raise ArgumentError, "Rules require #{rules.number_of_players} players (got #{players.length})" unless players.length == rules.number_of_players
 
       @rules, @players = rules, players
 

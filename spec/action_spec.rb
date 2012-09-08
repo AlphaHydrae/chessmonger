@@ -16,10 +16,10 @@ describe 'Action' do
   end
 
   it "should not be playable" do
-    lambda{ Chessmonger::Action.new(@player).play @game }.should raise_error
+    lambda{ Chessmonger::Action.new(@player).play @game }.should raise_error(NotImplementedError)
   end
 
   it "should not be cancelable" do
-    lambda{ Chessmonger::Action.new(@player).cancel @game }.should raise_error
+    lambda{ Chessmonger::Action.new(@player).cancel @game }.should raise_error(NotImplementedError)
   end
 end

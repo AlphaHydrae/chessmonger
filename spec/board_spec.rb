@@ -169,12 +169,12 @@ describe "Board" do
     end
 
     it "should be more than zero" do
-      lambda{ Chessmonger::Board.new(0, 8) }.should raise_error
-      lambda{ Chessmonger::Board.new(8, 0) }.should raise_error
-      lambda{ Chessmonger::Board.new(0, 0) }.should raise_error
-      lambda{ Chessmonger::Board.new(-1, 8) }.should raise_error
-      lambda{ Chessmonger::Board.new(8, -2) }.should raise_error
-      lambda{ Chessmonger::Board.new(-3, -4) }.should raise_error
+      lambda{ Chessmonger::Board.new(0, 8) }.should raise_error(ArgumentError)
+      lambda{ Chessmonger::Board.new(8, 0) }.should raise_error(ArgumentError)
+      lambda{ Chessmonger::Board.new(0, 0) }.should raise_error(ArgumentError)
+      lambda{ Chessmonger::Board.new(-1, 8) }.should raise_error(ArgumentError)
+      lambda{ Chessmonger::Board.new(8, -2) }.should raise_error(ArgumentError)
+      lambda{ Chessmonger::Board.new(-3, -4) }.should raise_error(ArgumentError)
     end
 
     it "should be the ones given at construction" do

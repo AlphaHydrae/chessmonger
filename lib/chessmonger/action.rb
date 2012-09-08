@@ -10,11 +10,11 @@ module Chessmonger
     end
 
     def play game
-      raise '#play has not been implemented'
+      raise NotImplementedError, '#play has not been implemented'
     end
 
     def cancel game
-      raise '#cancel has not been implemented'
+      raise NotImplementedError, '#cancel has not been implemented'
     end
   end
 end

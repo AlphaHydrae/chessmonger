@@ -41,7 +41,7 @@ describe 'Game' do
 
     it "should only accept the number of players defined by the rules" do
       [ [], @players[0, 1], (@players.dup << @p3) ].each do |invalid|
-        lambda{ Chessmonger::Game.new(@rules, invalid) }.should raise_error
+        lambda{ Chessmonger::Game.new(@rules, invalid) }.should raise_error(ArgumentError)
       end
     end
 

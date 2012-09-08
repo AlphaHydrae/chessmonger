@@ -28,8 +28,7 @@ describe 'Armory' do
   end
 
   it "should not accept non-behaviors" do
-    non_behavior = double
-    lambda{ Chessmonger::Armory.instance.register 'aBehavior', non_behavior }.should raise_error
+    lambda{ Chessmonger::Armory.instance.register 'aBehavior', Object.new }.should raise_error
   end
 
   it "should train pieces with a new instance of the behavior specified by name" do

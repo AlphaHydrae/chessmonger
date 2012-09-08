@@ -1,6 +1,8 @@
 
 describe 'Armory' do
 
+  # TODO: check type of behavior when creating
+
   after :each do
     Chessmonger::Armory.instance.instance_variable_set '@behaviors', {}
   end

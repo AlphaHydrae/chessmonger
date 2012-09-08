@@ -66,7 +66,7 @@ describe 'Game' do
     end
 
     it "should ask the rules to set up the game" do
-      @rules.should_receive(:setup).with kind_of(Chessmonger::Game)
+      @rules.should_receive(:setup).with no_args
       Chessmonger::Game.new @rules, @players
     end
   end
@@ -78,18 +78,18 @@ describe 'Game' do
     end
 
     it "should ask the rules to return the current player" do
-      @rules.should_receive(:player).with @game
+      @rules.should_receive(:player).with no_args
       @game.player
     end
 
     it "should ask the rules to return current actions" do
-      @rules.should_receive(:actions).with @game
+      @rules.should_receive(:actions).with no_args
       @game.actions
     end
 
     it "should ask the rules whether a piece belongs to an enemy player" do
       piece = double :player => @p2
-      @rules.should_receive(:enemy?).with @game, @p1, @p2
+      @rules.should_receive(:enemy?).with @p1, @p2
       @game.enemy_piece? @p1, piece
     end
   end

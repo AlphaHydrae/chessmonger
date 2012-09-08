@@ -15,7 +15,7 @@ module Chessmonger
       @history = []
       @status = :ongoing
 
-      @rules.setup self
+      @rules.setup
     end
 
     def play action
@@ -28,15 +28,15 @@ module Chessmonger
     end
 
     def player
-      @rules.player self
+      @rules.player
     end
 
     def actions
-      @rules.actions self
+      @rules.actions
     end
 
     def enemy_piece? player, piece
-      @rules.enemy? self, player, piece.player
+      @rules.enemy? player, piece.player
     end
   end
 end

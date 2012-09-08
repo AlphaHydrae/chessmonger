@@ -1,6 +1,8 @@
 
 describe 'Rules' do
 
+  # TODO: switch to factory
+
   def make_rules options = {}
     double.tap do |rules|
       rules.stub :number_of_players => 2 unless options[:number_of_players] == false

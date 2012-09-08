@@ -12,6 +12,7 @@ describe 'Rules' do
       rules.stub :allowed? => true unless options[:allowed?] == false
       rules.stub :actions => [] unless options[:actions] == false
       rules.stub :player => double( :name => 'John Doe' ) unless options[:player] == false
+      rules.stub :enemy? => true unless options[:enemy?] == false
     end
   end
 
@@ -55,7 +56,7 @@ describe 'Rules' do
 
   [
     :number_of_players, :board_width, :board_height, :playing_direction,
-    :pieces, :setup, :allowed?, :actions, :player
+    :pieces, :setup, :allowed?, :actions, :player, :enemy?
   ].each do |missing|
     it "should not accept rules which do not respond to :#{missing}" do
       options = {}

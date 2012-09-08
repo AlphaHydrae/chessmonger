@@ -34,5 +34,9 @@ module Chessmonger
     def actions
       @rules.actions self
     end
+
+    def enemy_piece? player, piece
+      @rules.enemy? self, player, piece.player
+    end
   end
 end

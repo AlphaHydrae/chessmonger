@@ -15,6 +15,7 @@ describe 'Game' do
     @rules.stub :allowed? => true
     @rules.stub :actions => []
     @rules.stub :player => double( :name => 'John Doe' )
+    @rules.stub :enemy? => true
     
     @players = []
 
@@ -83,6 +84,12 @@ describe 'Game' do
     it "should ask the rules to return current actions" do
       @rules.should_receive(:actions).with @game
       @game.actions
+    end
+
+    it "should ask the rules whether a piece belongs to an enemy player" do
+      piece = double :player => @p2
+      @rules.should_receive(:enemy?).with @game, @p1, @p2
+      @game.enemy_piece? @p1, piece
     end
   end
 

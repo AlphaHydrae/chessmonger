@@ -10,6 +10,8 @@ describe 'Rules' do
       rules.stub :pieces => (options[:pieces] || [ 'a', 'b' ]) unless options[:pieces] == false
       rules.stub :setup => nil unless options[:setup] == false
       rules.stub :allowed? => true unless options[:allowed?] == false
+      rules.stub :actions => [] unless options[:actions] == false
+      rules.stub :player => double( :name => 'John Doe' ) unless options[:player] == false
     end
   end
 
@@ -51,7 +53,10 @@ describe 'Rules' do
     lambda{ Chessmonger::Rules.instance.register 'someRules', Object.new }.should raise_error(ArgumentError)
   end
 
-  [ :number_of_players, :board_width, :board_height, :playing_direction, :pieces, :setup, :allowed? ].each do |missing|
+  [
+    :number_of_players, :board_width, :board_height, :playing_direction,
+    :pieces, :setup, :allowed?, :actions, :player
+  ].each do |missing|
     it "should not accept rules which do not respond to :#{missing}" do
       options = {}
       options[missing] = false

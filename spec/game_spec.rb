@@ -6,9 +6,15 @@ describe 'Game' do
   before :each do
 
     @rules = double('rules')
-    @rules.stub(:board_width){ 8 }
-    @rules.stub(:board_height){ 8 }
-    @rules.stub(:number_of_players){ 2 }
+    @rules.stub :number_of_players => 2
+    @rules.stub :board_width => 8
+    @rules.stub :board_height => 8
+    @rules.stub :playing_direction => :N
+    @rules.stub :pieces => [ 'a', 'b' ]
+    @rules.stub :setup
+    @rules.stub :allowed? => true
+    @rules.stub :actions => []
+    @rules.stub :player => double( :name => 'John Doe' )
     
     @players = []
 
@@ -55,6 +61,28 @@ describe 'Game' do
       Chessmonger::Board.should_receive(:new).with(8, 8)
       game = Chessmonger::Game.new @rules, @players
       game.board.should be(@board)
+    end
+
+    it "should ask the rules to set up the game" do
+      @rules.should_receive(:setup).with kind_of(Chessmonger::Game)
+      Chessmonger::Game.new @rules, @players
+    end
+  end
+
+  describe "as a rules proxy" do
+
+    before :each do
+      @game = Chessmonger::Game.new @rules, @players
+    end
+
+    it "should ask the rules to return the current player" do
+      @rules.should_receive(:player).with @game
+      @game.player
+    end
+
+    it "should ask the rules to return current actions" do
+      @rules.should_receive(:actions).with @game
+      @game.actions
     end
   end
 
@@ -111,22 +139,6 @@ describe 'Game' do
       @game.cancel
       @game.history.should have(1).items
       @game.history.should include(@a1)
-    end
-  end
-
-  describe '#player' do
-
-    it "should return the current player defined by the rules" do
-
-      @game = Chessmonger::Game.new @rules, @players
-
-      @rules.stub(:current_player => @p1)
-      @rules.should_receive(:current_player).with(@game)
-      @game.player.should be(@p1)
-
-      @rules.stub(:current_player => @p2)
-      @rules.should_receive(:current_player).with(@game)
-      @game.player.should be(@p2)
     end
   end
 end

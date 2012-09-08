@@ -1,12 +1,23 @@
 
 describe 'Rules' do
 
+  def make_rules *pieces
+    double.tap do |rules|
+      rules.stub :number_of_players => 2
+      rules.stub :board_width => 8
+      rules.stub :board_height => 8
+      rules.stub :pieces => pieces
+    end
+  end
+
   before :each do
+
+    @armory = double
+    @armory.stub :names => [ 'a', 'b', 'c' ]
+
+    Chessmonger::Armory.stub :instance => @armory
     
-    @rules = double
-    @rules.stub :number_of_players => 2
-    @rules.stub :board_width => 8
-    @rules.stub :board_height => 8
+    @rules = make_rules 'a', 'b'
   end
 
   after :each do
@@ -27,18 +38,18 @@ describe 'Rules' do
   end
 
   it "should replace existing names" do
-
-    other_rules = double
-    other_rules.stub :number_of_players => 2
-    other_rules.stub :board_width => 8
-    other_rules.stub :board_height => 8
-
+    other_rules = make_rules 'b', 'c'
     Chessmonger::Rules.instance.register 'someRules', other_rules
     Chessmonger::Rules.instance.register 'someRules', @rules
     Chessmonger::Rules.instance.get('someRules').should be(@rules)
   end
 
   it "should not accept non-rules" do
-    lambda{ Chessmonger::Rules.instance.register Object.new }.should raise_error(ArgumentError)
+    lambda{ Chessmonger::Rules.instance.register 'someRules', Object.new }.should raise_error(ArgumentError)
+  end
+
+  it "should not accept rules using pieces that are not in the armory" do
+    invalid_rules = make_rules 'a', 'd'
+    lambda{ Chessmonger::Rules.instance.register 'someRules', invalid_rules }.should raise_error(ArgumentError)
   end
 end

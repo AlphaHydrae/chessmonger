@@ -10,12 +10,16 @@ module Chessmonger
     end
 
     def register name, behavior
-      raise 'Behavior must respond to :create' unless behavior.respond_to? :create
+      raise ArgumentError, 'Behavior must respond to :create' unless behavior.respond_to? :create
       @behaviors[name] = behavior
     end
 
     def get name
       @behaviors[name]
+    end
+
+    def names
+      @behaviors.keys
     end
 
     def train name, game, player = nil

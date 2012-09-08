@@ -2,7 +2,7 @@
 describe 'Armory' do
 
   after :each do
-    Chessmonger::Armory.instance_variable_set '@behaviors', {}
+    Chessmonger::Armory.instance.instance_variable_set '@behaviors', {}
   end
 
   it "should be a singleton" do
@@ -19,6 +19,18 @@ describe 'Armory' do
     Chessmonger::Armory.instance.get('aBehavior').should be(behavior)
   end
 
+  it "should provide the list of registered names" do
+    Chessmonger::Armory.instance.names.should be_empty
+    b1 = double :create => double
+    b2 = double :create => double
+    Chessmonger::Armory.instance.register 'aBehavior', b1
+    Chessmonger::Armory.instance.register 'anotherBehavior', b2
+    Chessmonger::Armory.instance.names.tap do |names|
+      names.should have(2).items
+      names.should include('aBehavior', 'anotherBehavior')
+    end
+  end
+
   it "should replace existing names" do
     b1 = double :create => double
     b2 = double :create => double
@@ -28,7 +40,7 @@ describe 'Armory' do
   end
 
   it "should not accept non-behaviors" do
-    lambda{ Chessmonger::Armory.instance.register 'aBehavior', Object.new }.should raise_error
+    lambda{ Chessmonger::Armory.instance.register 'aBehavior', Object.new }.should raise_error(ArgumentError)
   end
 
   it "should train pieces with a new instance of the behavior specified by name" do

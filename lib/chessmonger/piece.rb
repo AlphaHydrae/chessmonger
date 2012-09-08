@@ -4,8 +4,8 @@ module Chessmonger
   class Piece
     attr_accessor :player
 
-    def initialize player, behavior
-      @player, @behavior = player, behavior
+    def initialize behavior, player = nil
+      @behavior, @player = behavior, player
     end
 
     def each_action game, origin, &block

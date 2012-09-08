@@ -4,15 +4,19 @@ describe 'Piece' do
   before :each do
 
     @player = double :name => 'John Doe'
-    @behavior = double :each_action
+    @behavior = double :each_action => nil, :can_attack? => false
   end
 
-  it "should be initializable with a player and a behavior" do
-    lambda{ Chessmonger::Piece.new @player, @behavior }.should_not raise_error
+  it "should be initializable with a behavior" do
+    lambda{ Chessmonger::Piece.new @behavior }.should_not raise_error
+  end
+
+  it "should be initializable with a behavior and a player" do
+    lambda{ Chessmonger::Piece.new @behavior, @player }.should_not raise_error
   end
 
   it "should have the specified player" do
-    piece = Chessmonger::Piece.new @player, @behavior
+    piece = Chessmonger::Piece.new @behavior, @player
     piece.player.should be(@player)
   end
 
@@ -23,7 +27,7 @@ describe 'Piece' do
       @game = double
       @origin = double
 
-      @piece = Chessmonger::Piece.new @player, @behavior
+      @piece = Chessmonger::Piece.new @behavior, @player
     end
 
     it "should allow its player to be changed" do

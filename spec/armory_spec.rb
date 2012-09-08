@@ -1,0 +1,52 @@
+
+describe 'Armory' do
+
+  after :each do
+    Chessmonger::Armory.instance_variable_set '@behaviors', {}
+  end
+
+  it "should be a singleton" do
+    lambda{ Chessmonger::Armory.new }.should raise_error
+  end
+
+  it "should be provided as a shorthand by the top module" do
+    Chessmonger.armory.should be(Chessmonger::Armory.instance)
+  end
+
+  it "should store behaviors by name" do
+    behavior = double :create => double
+    Chessmonger::Armory.instance.register 'aBehavior', behavior
+    Chessmonger::Armory.instance.get('aBehavior').should be(behavior)
+  end
+
+  it "should replace existing names" do
+    b1 = double :create => double
+    b2 = double :create => double
+    Chessmonger::Armory.instance.register 'aBehavior', b1
+    Chessmonger::Armory.instance.register 'aBehavior', b2
+    Chessmonger::Armory.instance.get('aBehavior').should be(b2)
+  end
+
+  it "should not accept non-behaviors" do
+    non_behavior = double
+    lambda{ Chessmonger::Armory.instance.register 'aBehavior', non_behavior }.should raise_error
+  end
+
+  it "should train pieces with a new instance of the behavior specified by name" do
+
+    piece = double
+    Chessmonger::Piece.stub(:new).and_return piece
+    behavior = double
+    behavior_factory = double :create => behavior
+    game = double
+    player = double
+
+    Chessmonger::Armory.instance.register 'aBehavior', behavior_factory
+
+    behavior_factory.should_receive(:create).with game
+    Chessmonger::Piece.should_receive(:new).with behavior, player
+
+    result = Chessmonger::Armory.instance.train 'aBehavior', game, player
+    result.should be(piece)
+  end
+end

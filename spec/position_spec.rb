@@ -32,4 +32,41 @@ describe 'Position' do
       pos.index.should == 0
     end
   end
+
+  describe 'distance' do
+
+    it "should calculate the horizontal distance" do
+      index = 0
+      a = Chessmonger::Position.new 4, 4, index
+      8.times do |i|
+        8.times do |j|
+          b = Chessmonger::Position.new i + 1, j + 1, index += 1
+          a.horizontal_distance(b).should == i - 4 + 1
+        end
+      end
+    end
+
+    it "should calculate the vertical distance" do
+      index = 0
+      a = Chessmonger::Position.new 4, 4, index
+      8.times do |i|
+        8.times do |j|
+          b = Chessmonger::Position.new i + 1, j + 1, index += 1
+          a.vertical_distance(b).should == j - 4 + 1
+        end
+      end
+    end
+
+    it "should calculate the longest distance (horizontal/vertical)" do
+      a = Chessmonger::Position.new 4, 4, 0
+      b = Chessmonger::Position.new 6, 7, 1
+      a.longest_distance(b).should == 3
+    end
+
+    it "should calculate the product of distances (horizontal/vertical)" do
+      a = Chessmonger::Position.new 4, 4, 0
+      b = Chessmonger::Position.new 6, 7, 1
+      a.distance_product(b).should == 6
+    end
+  end
 end

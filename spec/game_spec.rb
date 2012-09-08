@@ -2,6 +2,7 @@
 describe 'Game' do
 
   # TODO: test captures
+  # TODO: playing direction proxy
 
   before :each do
 

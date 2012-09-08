@@ -10,5 +10,21 @@ module Chessmonger
       raise ArgumentError, "Index must be greater than or equal to 0 (got #{index})" unless index >= 0
       @x, @y, @index = x, y, index
     end
+
+    def horizontal_distance target
+      target.x - @x
+    end
+
+    def vertical_distance target
+      target.y - @y
+    end
+
+    def longest_distance target
+      [ (target.x - @x).abs, (target.y - @y).abs ].max
+    end
+
+    def distance_product target
+      (target.x - @x).abs * (target.y - @y).abs
+    end
   end
 end

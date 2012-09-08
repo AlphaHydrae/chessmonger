@@ -38,8 +38,8 @@ module Chessmonger
     end
 
     def each
-      @contents.each do |object|
-        yield object if object
+      @contents.each_with_index do |object,i|
+        yield object, @positions[i] if object
       end
     end
 

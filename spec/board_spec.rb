@@ -68,8 +68,10 @@ describe "Board" do
       board.put op[0], op[1]
     end
     n = 0
-    board.each do |o|
-      contents.delete_if{ |op| op[0] === o }
+    board.each do |o,pos|
+      op = contents.find{ |op| op[0] == o }
+      pos.should be(op[1])
+      contents.delete op
       n += 1
     end
     n.should == 3

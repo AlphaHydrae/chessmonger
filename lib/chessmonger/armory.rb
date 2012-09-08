@@ -22,9 +22,13 @@ module Chessmonger
       @behaviors.keys
     end
 
-    def train name, game, player = nil
-      behavior = @behaviors[name].create game
-      Chessmonger::Piece.new behavior, player
+    def train name, game, player
+      piece = Chessmonger::Piece.new
+      behavior = @behaviors[name].create game, piece
+      piece.tap do |p|
+        p.player = player
+        p.behavior = behavior
+      end
     end
   end
 

@@ -45,7 +45,7 @@ describe 'Armory' do
 
   it "should train pieces with a new instance of the behavior specified by name" do
 
-    piece = double
+    piece = double :player= => nil, :behavior= => nil
     Chessmonger::Piece.stub(:new).and_return piece
     behavior = double
     behavior_factory = double :create => behavior
@@ -54,8 +54,10 @@ describe 'Armory' do
 
     Chessmonger::Armory.instance.register 'aBehavior', behavior_factory
 
-    behavior_factory.should_receive(:create).with game
-    Chessmonger::Piece.should_receive(:new).with behavior, player
+    behavior_factory.should_receive(:create).with game, piece
+    Chessmonger::Piece.should_receive :new
+    piece.should_receive(:player=).with player
+    piece.should_receive(:behavior=).with behavior
 
     result = Chessmonger::Armory.instance.train 'aBehavior', game, player
     result.should be(piece)

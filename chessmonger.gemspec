@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
-  s.date = "2012-09-08"
+  s.date = "2012-09-09"
   s.description = "Extensible grid game engine in Ruby."
   s.email = "hydrae.alpha@gmail.com"
   s.extra_rdoc_files = [
@@ -32,7 +32,6 @@ Gem::Specification.new do |s|
     "lib/chessmonger/armory.rb",
     "lib/chessmonger/board.rb",
     "lib/chessmonger/direction.rb",
-    "lib/chessmonger/distance.rb",
     "lib/chessmonger/game.rb",
     "lib/chessmonger/move.rb",
     "lib/chessmonger/piece.rb",
@@ -43,7 +42,6 @@ Gem::Specification.new do |s|
     "spec/armory_spec.rb",
     "spec/board_spec.rb",
     "spec/direction_spec.rb",
-    "spec/distance_spec.rb",
     "spec/game_spec.rb",
     "spec/helper.rb",
     "spec/move_spec.rb",

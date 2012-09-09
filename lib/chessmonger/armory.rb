@@ -9,8 +9,10 @@ module Chessmonger
       @behaviors = {}
     end
 
-    def register name, behavior
+    def register behavior, options = {}
       raise ArgumentError, 'Behavior must respond to :create' unless behavior.respond_to? :create
+      raise ArgumentError, 'Behavior must respond to :name' unless behavior.respond_to? :name
+      name = options[:name] || behavior.name
       @behaviors[name] = behavior
     end
 
@@ -25,10 +27,20 @@ module Chessmonger
     def train name, game, player
       piece = Chessmonger::Piece.new
       behavior = @behaviors[name].create game, piece
+      check behavior, name
       piece.tap do |p|
         p.player = player
         p.behavior = behavior
       end
+    end
+
+    private
+
+    def check behavior, name
+      raise ArgumentError, "Behavior #{name} must respond to :each_action" unless behavior.respond_to?(:each_action)
+      raise ArgumentError, "Behavior #{name} must respond to :can_attack?" unless behavior.respond_to?(:can_attack?)
+      raise ArgumentError, "Behavior #{name} must respond to :name" unless behavior.respond_to?(:name)
+      raise ArgumentError, "Behavior #{name} must respond to :name=" unless behavior.respond_to?(:name=)
     end
   end
 

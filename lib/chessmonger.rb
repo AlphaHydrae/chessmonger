@@ -6,6 +6,5 @@ end
 dirname = File.dirname __FILE__
 libs = File.join dirname, 'chessmonger'
 [
-  :action, :armory, :board, :direction, :game,
-  :move, :piece, :player, :position, :rules
+  :core, :engine
 ].each{ |lib| require File.join libs, lib.to_s }

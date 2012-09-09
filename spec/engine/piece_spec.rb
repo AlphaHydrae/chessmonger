@@ -2,6 +2,7 @@
 describe 'Piece' do
 
   it "should be initializable with nothing" do
+    game = double
     lambda{ Chessmonger::Piece.new }.should_not raise_error
   end
 
@@ -11,6 +12,7 @@ describe 'Piece' do
 
       @game = double
       @player = double :name => 'John Doe'
+      @game = double
       @behavior = double :each_action => nil, :can_attack? => false
       @origin = double
 
@@ -30,15 +32,15 @@ describe 'Piece' do
     it "should ask its behavior to iterate over the possible actions" do
       @piece.behavior = @behavior
       block = lambda{}
-      @behavior.should_receive(:each_action).with @origin, &block
-      @piece.each_action @origin, &block
+      @behavior.should_receive(:each_action).with @game, @piece, @origin, &block
+      @piece.each_action @game, @origin, &block
     end
 
     it "should ask its behavior whether it can attack the specified target" do
       @piece.behavior = @behavior
       target = double
-      @behavior.should_receive(:can_attack?).with @origin, target
-      @piece.can_attack? @origin, target
+      @behavior.should_receive(:can_attack?).with @game, @piece, @origin, target
+      @piece.can_attack? @game, @origin, target
     end
   end
 end

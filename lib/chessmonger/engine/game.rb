@@ -14,8 +14,6 @@ module Chessmonger
       @board = Board.new rules.board_width, rules.board_height
       @history = []
       @status = :ongoing
-
-      @rules.setup
     end
 
     def play action
@@ -28,15 +26,15 @@ module Chessmonger
     end
 
     def player
-      @rules.player
+      @rules.player self
     end
 
     def actions
-      @rules.actions
+      @rules.actions self
     end
 
     def enemy_piece? player, piece
-      @rules.enemy? player, piece.player
+      @rules.enemy? self, player, piece.player
     end
   end
 end

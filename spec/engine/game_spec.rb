@@ -87,6 +87,11 @@ describe 'Game' do
       @rules.should_receive(:enemy?).with @game, @p1, @p2
       @game.enemy_piece? @p1, piece
     end
+
+    it "should ask the playing direction" do
+      @rules.should_receive(:playing_direction).with @game, @p1
+      @game.playing_direction @p1
+    end
   end
 
   describe '#play' do

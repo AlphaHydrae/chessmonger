@@ -36,5 +36,9 @@ module Chessmonger
     def enemy_piece? player, piece
       @rules.enemy? self, player, piece.player
     end
+
+    def playing_direction player
+      @rules.playing_direction self, player
+    end
   end
 end

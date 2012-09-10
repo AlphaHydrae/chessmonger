@@ -36,6 +36,13 @@ describe 'Piece' do
       @piece.each_action @game, @origin, &block
     end
 
+    it "should return all actions given by its behavior" do
+      behavior = double
+      behavior.stub(:each_action).and_yield('a').and_yield('b')
+      @piece.behavior = behavior
+      @piece.actions(@game, @origin).should == [ 'a', 'b' ]
+    end
+
     it "should ask its behavior whether it can attack the specified target" do
       @piece.behavior = @behavior
       target = double

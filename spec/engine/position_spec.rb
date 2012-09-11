@@ -1,4 +1,6 @@
 
+# TODO: spec ==
+
 describe 'Position' do
 
   it "should be initializable with x and y coordinates and an index" do

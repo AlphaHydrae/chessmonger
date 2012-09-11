@@ -4,6 +4,10 @@ module Chessmonger
   class Piece
     attr_accessor :behavior, :player
 
+    def initialize behavior = nil, player = nil
+      @behavior, @player = behavior, player
+    end
+
     def each_action game, origin, &block
       @behavior.each_action game, self, origin, &block
     end

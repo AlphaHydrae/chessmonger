@@ -13,7 +13,7 @@ module Chessmonger
 
       [
         :number_of_players, :board_width, :board_height, :playing_direction,
-        :pieces, :setup, :allowed?, :actions, :player, :enemy?
+        :pieces, :setup, :allowed?, :current_actions, :current_player, :enemy?
       ].each do |method|
         raise ArgumentError, "Rules must implement ##{method}" unless rules.respond_to? method
       end

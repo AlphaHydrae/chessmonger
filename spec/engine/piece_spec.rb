@@ -2,8 +2,22 @@
 describe 'Piece' do
 
   it "should be initializable with nothing" do
-    game = double
     lambda{ Chessmonger::Piece.new }.should_not raise_error
+  end
+
+  it "should be initializable with a behavior" do
+    behavior = double
+    p = nil
+    lambda{ p = Chessmonger::Piece.new behavior }.should_not raise_error
+    p.behavior.should be(behavior)
+  end
+
+  it "should be initializable with a behavior and a player" do
+    behavior, player = double, double
+    p = nil
+    lambda{ p = Chessmonger::Piece.new behavior, player }.should_not raise_error
+    p.behavior.should be(behavior)
+    p.player.should be(player)
   end
 
   describe 'when used' do

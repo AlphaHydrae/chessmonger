@@ -11,6 +11,10 @@ module Chessmonger
       @x, @y, @index = x, y, index
     end
 
+    def == other
+      x == other.x and y == other.y
+    end
+
     def horizontal_distance target
       target.x - @x
     end

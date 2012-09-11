@@ -1,5 +1,4 @@
 
-# TODO: spec ==
 # TODO: store board and simplify directions
 
 describe 'Position' do
@@ -34,6 +33,12 @@ describe 'Position' do
     Chessmonger::Position.new(2, 3, 0).tap do |pos|
       pos.index.should == 0
     end
+  end
+
+  it "should be equal to another position with the same coordinates" do
+    a = Chessmonger::Position.new 4, 4, 0
+    Chessmonger::Position.new(4, 4, 0).should == a
+    Chessmonger::Position.new(4, 4, 1).should == a
   end
 
   describe 'distance' do

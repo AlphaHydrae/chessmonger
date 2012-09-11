@@ -1,5 +1,6 @@
 
 # TODO: spec ==
+# TODO: store board and simplify directions
 
 describe 'Position' do
 

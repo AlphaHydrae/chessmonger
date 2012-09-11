@@ -27,6 +27,12 @@ module Chessmonger
           end
         end
       end
+
+      def can_attack? game, piece, origin, target
+        dir = Chessmonger::Direction.between origin, target
+        playing_dir = game.playing_direction piece.player
+        origin.longest_distance(target) == 1 and Chessmonger::Direction.smallest_angle_between(dir, playing_dir) == 1
+      end
     end
   end
 end

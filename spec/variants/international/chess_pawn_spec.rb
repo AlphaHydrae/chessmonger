@@ -20,6 +20,24 @@ describe 'Chess Pawn' do
     @pawn.behavior = @behavior
   end
 
+  it "should attack diagonally" do
+
+    origin = @game.board.pos 4, 4
+    @game.board.put @pawn, origin
+    dir = @game.playing_direction @pawn.player
+
+    left_target = dir.rotate(-1).from @game.board, origin
+    right_target = dir.rotate(1).from @game.board, origin
+    correct_targets = [ left_target, right_target ]
+
+    8.times do |i|
+      8.times do |j|
+        target = @game.board.pos i + 1, j + 1
+        @pawn.can_attack?(@game, origin, target).should == correct_targets.include?(target)
+      end
+    end
+  end
+
   it "should move forward one square" do
     5.times do |y|
 

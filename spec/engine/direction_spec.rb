@@ -3,6 +3,7 @@ describe 'Direction' do
 
   # TODO: check that #from does not run out of the board
   # TODO: check that smallest_angle_between does not work with arbitrary directions
+  # TODO: make smallest_angle_between an instance method
 
   it "should be initializable with two integer differentials" do
     lambda{ Chessmonger::Direction.new 4, 4 }.should_not raise_error

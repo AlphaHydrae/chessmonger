@@ -8,7 +8,7 @@ describe 'Chess King' do
     @rules.stub :board_height => 8
     @rules.stub :number_of_players => 2
     @rules.stub :playing_direction => Chessmonger::Direction::N
-    @rules.stub :enemy? => true
+    @rules.stub(:enemy?){ |player,other| player != other }
 
     @p1 = Chessmonger::Player.new 'John Doe'
     @p2 = Chessmonger::Player.new 'Jane Doe'
@@ -20,18 +20,23 @@ describe 'Chess King' do
     @king.behavior = @behavior
   end
 
-  it "should attack all around" do
+  it "should be able to attack all around" do
     
     origin = @game.board.pos 4, 4
     @game.board.put @king, origin
-    
-    Chessmonger::Direction::ALL.each do |dir|
-      target = dir.from @game.board, origin
-      @king.can_attack?(@game, origin, target).should be_true
+
+    targets = Chessmonger::Direction::ALL.collect{ |dir| dir.from @game.board, origin }
+
+    8.times do |i|
+      8.times do |j|
+        target = @game.board.pos i + 1, j + 1
+        next if target == origin
+        @king.can_attack?(@game, origin, target).should == targets.include?(target)
+      end
     end
   end
 
-  it "should be able to move one square in any direction" do
+  it "should move one square in any direction" do
 
     origin = @game.board.pos 4, 4
     @game.board.put @king, origin
@@ -43,5 +48,36 @@ describe 'Chess King' do
     actions = @king.actions @game, origin
     actions.should have(8).items
     actions.collect{ |a| a.target }.should include(*targets)
+  end
+
+  it "should attack one square in any direction" do
+
+    origin = @game.board.pos 4, 4
+    @game.board.put @king, origin
+
+    enemy_pieces = []
+    targets = []
+
+    # put 5 pieces around the king
+    [ :N, :NE, :E, :SW, :W ].each do |dir_name|
+      dir = Chessmonger::Direction.const_get dir_name
+      enemy_pieces << piece = double(:player => @p2)
+      targets << target = dir.from(@game.board, origin)
+      @game.board.put piece, target
+    end
+
+    # put 3 pieces elsewhere
+    @game.board.put double(:player => @p2), @game.board.pos(4, 6)
+    @game.board.put double(:player => @p2), @game.board.pos(6, 2)
+    @game.board.put double(:player => @p2), @game.board.pos(2, 5)
+
+    actions = @king.actions @game, origin
+    actions.should have(8).items
+    actions.select{ |a| a.capture.nil? }.should have(3).items
+    actions.select{ |a| a.capture }.tap do |captures|
+      captures.should have(5).items
+      captures.collect{ |c| c.target }.should include(*targets)
+      captures.collect{ |c| c.capture }.should include(*enemy_pieces)
+    end
   end
 end

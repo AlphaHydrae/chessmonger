@@ -6,10 +6,11 @@ module Chessmonger
     class InternationalChess < BasicRules
 
       def setup game
+        board = game.board
         pawn = Behavior::ChessPawn.new
         8.times do |i|
-          game.board.put Piece.new(pawn, game.players[0]), game.board.pos(i + 1, 2)
-          game.board.put Piece.new(pawn, game.players[1]), game.board.pos(i + 1, 7)
+          board.put Piece.new(pawn, game.players[0]), board.pos(i + 1, 2)
+          board.put Piece.new(pawn, game.players[1]), board.pos(i + 1, 7)
         end
       end
     end

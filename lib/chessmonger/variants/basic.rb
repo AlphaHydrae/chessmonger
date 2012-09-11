@@ -5,17 +5,27 @@ module Chessmonger
 
     class BasicRules
 
+      def setup game
+        raise NotImplementedError, '#setup must prepare the board for a new game'
+      end
+
       def current_actions game
         player = current_player game
         [].tap do |actions|
           game.board.each do |piece,pos|
             if piece.player == player
               piece.each_action game, pos do |action|
-                actions << action
+                game.play action
+                actions << action if allowed? game, player
+                game.cancel
               end
             end
           end
         end
+      end
+
+      def allowed? game, player
+        raise NotImplementedError, '#allowed? must indicate whether the current situation is allowed for the specified player'
       end
 
       def current_player game

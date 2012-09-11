@@ -1,5 +1,6 @@
 
 describe 'InternationalChess' do
+  extend RulesSpecGenerator
 
   before :each do
     @p1, @p2 = Chessmonger::Player.new('John Doe'), Chessmonger::Player.new('Jane Doe')
@@ -7,39 +8,11 @@ describe 'InternationalChess' do
     @game = Chessmonger::Game.new @rules, [ @p1, @p2 ]
   end
 
-  it "should have a board of 8x8" do
-    @rules.board_width.should == 8
-    @rules.board_height.should == 8
-  end
-
-  it "should have 2 players" do
-    @rules.number_of_players.should == 2
-  end
-
-  it "should return north as the playing direction of the first player" do
-    @rules.playing_direction(@game, @p1).should == Chessmonger::Direction::N
-  end
-
-  it "should return south as the playing direction of the second player" do
-    @rules.playing_direction(@game, @p2).should == Chessmonger::Direction::S
-  end
-
-  it "should return the first player as the current player for a new game" do
-    @rules.current_player(@game).should be(@p1)
-  end
-
-  it "should return the second player as the current player after a move from the first player" do
-    move = Chessmonger::Move.new @p1, double, @game.board.pos(4, 2), @game.board.pos(4, 3)
-    @game.play move
-    @rules.current_player(@game).should be(@p2)
-  end
-
-  it "should indicate both players as mutual enemies" do
-    @rules.enemy?(@game, @p1, @p2).should be_true
-    @rules.enemy?(@game, @p2, @p1).should be_true
-    @rules.enemy?(@game, @p1, @p1).should be_false
-    @rules.enemy?(@game, @p2, @p2).should be_false
-  end
+  its_board_dimensions_should_be 8, 8
+  its_number_of_players_should_be 2
+  its_players_should_be_enemies
+  its_players_should_play_in_turn
+  its_two_players_should_move_north_and_south
 
   describe '#setup' do
 

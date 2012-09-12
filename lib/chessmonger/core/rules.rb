@@ -13,13 +13,10 @@ module Chessmonger
 
       [
         :number_of_players, :board_width, :board_height, :playing_direction,
-        :pieces, :setup, :allowed?, :current_actions, :current_player, :enemy?
+        :setup, :current_actions, :current_player, :enemy?
       ].each do |method|
         raise ArgumentError, "Rules must implement ##{method}" unless rules.respond_to? method
       end
-
-      unknown_pieces = rules.pieces - Chessmonger.armory.names
-      raise ArgumentError, "Rules contain pieces that are not registered in the armory: #{unknown_pieces.join ', '}" if unknown_pieces.any?
 
       @rules[name] = rules
     end

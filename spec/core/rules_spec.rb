@@ -9,9 +9,7 @@ describe 'Rules' do
       rules.stub :board_width => 8 unless options[:board_width] == false
       rules.stub :board_height => 8 unless options[:board_height] == false
       rules.stub :playing_direction => double unless options[:playing_direction] == false
-      rules.stub :pieces => (options[:pieces] || [ 'a', 'b' ]) unless options[:pieces] == false
       rules.stub :setup => nil unless options[:setup] == false
-      rules.stub :allowed? => true unless options[:allowed?] == false
       rules.stub :current_actions => [] unless options[:current_actions] == false
       rules.stub :current_player => double( :name => 'John Doe' ) unless options[:current_player] == false
       rules.stub :enemy? => true unless options[:enemy?] == false
@@ -22,8 +20,6 @@ describe 'Rules' do
 
     @armory = double
     @armory.stub :names => [ 'a', 'b', 'c' ]
-
-    Chessmonger::Armory.stub :instance => @armory
     
     @rules = make_rules
   end
@@ -58,7 +54,7 @@ describe 'Rules' do
 
   [
     :number_of_players, :board_width, :board_height, :playing_direction,
-    :pieces, :setup, :allowed?, :current_actions, :current_player, :enemy?
+    :setup, :current_actions, :current_player, :enemy?
   ].each do |missing|
     it "should not accept rules which do not respond to :#{missing}" do
       options = {}
@@ -66,10 +62,5 @@ describe 'Rules' do
       invalid_rules = make_rules options
       lambda{ Chessmonger::Rules.instance.register 'someRules', invalid_rules }.should raise_error(ArgumentError)
     end
-  end
-
-  it "should not accept rules using pieces that are not in the armory" do
-    invalid_rules = make_rules :pieces => [ 'a', 'd' ]
-    lambda{ Chessmonger::Rules.instance.register 'someRules', invalid_rules }.should raise_error(ArgumentError)
   end
 end

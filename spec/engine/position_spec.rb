@@ -1,5 +1,6 @@
 
 # TODO: store board and simplify directions
+# TODO: zero-base coordinates?
 
 describe 'Position' do
 

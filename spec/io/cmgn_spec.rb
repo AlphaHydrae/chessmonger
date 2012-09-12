@@ -20,10 +20,23 @@ describe 'CMGN' do
 
   it "should save and load an empty game correctly" do
     copy = Chessmonger::IO::CMGN.load(Chessmonger::IO::CMGN.save(@game))
+    copy.status.should == @game.status
     # FIXME: this should be an equality check on the rules, not on their class
     copy.rules.class.should == @game.rules.class
     copy.players.each_with_index do |p,i|
       @game.players[i].name.should == p.name
     end
+    copy.history.length.should == @game.history.length
+    copy.history.each_with_index do |action,i|
+      original = @game.history[i]
+      action.player.name.should == original.player.name
+      copy.players.index(action.player).should == @game.players.index(original.player)
+      action.origin.should == original.origin
+      action.target.should == original.target
+    end
+  end
+
+  it "should save and load an ongoing game correctly" do
+    5.times{ @game.play @game.current_actions.sample }
   end
 end

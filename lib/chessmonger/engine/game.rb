@@ -25,12 +25,12 @@ module Chessmonger
       history.pop.cancel self
     end
 
-    def player
-      @rules.player self
+    def current_player
+      @rules.current_player self
     end
 
-    def actions
-      @rules.actions self
+    def current_actions
+      @rules.current_actions self
     end
 
     def enemy_piece? player, piece

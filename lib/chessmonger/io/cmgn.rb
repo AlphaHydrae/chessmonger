@@ -35,8 +35,9 @@ module Chessmonger
         end
 
         players = []
-        2.times do |i|
-          players << Player.new(headers["P#{i + 1}"])
+        # TODO: validate player index
+        headers.select{ |k,v| k.match /^P\d+$/ }.each_pair do |k,v|
+          players[k.sub(/^P/, '').to_i - 1] = Player.new v
         end
 
         rules = Variants::InternationalChess.new

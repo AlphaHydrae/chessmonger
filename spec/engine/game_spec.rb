@@ -14,8 +14,8 @@ describe 'Game' do
     @rules.stub :pieces => [ 'a', 'b' ]
     @rules.stub :setup
     @rules.stub :allowed? => true
-    @rules.stub :actions => []
-    @rules.stub :player => double( :name => 'John Doe' )
+    @rules.stub :current_actions => []
+    @rules.stub :current_player => double( :name => 'John Doe' )
     @rules.stub :enemy? => true
     
     @players = []
@@ -73,13 +73,13 @@ describe 'Game' do
     end
 
     it "should ask the rules to return the current player" do
-      @rules.should_receive(:player).with @game
-      @game.player
+      @rules.should_receive(:current_player).with @game
+      @game.current_player
     end
 
     it "should ask the rules to return current actions" do
-      @rules.should_receive(:actions).with @game
-      @game.actions
+      @rules.should_receive(:current_actions).with @game
+      @game.current_actions
     end
 
     it "should ask the rules whether a piece belongs to an enemy player" do

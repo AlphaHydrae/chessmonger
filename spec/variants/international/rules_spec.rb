@@ -54,4 +54,27 @@ describe 'InternationalChess' do
     #8.times{ |i| board.get(board.pos(i + 1, 1)).player.should be(@game.players[1]) }
     board.get(board.pos(4, 8)).behavior.should be_a_kind_of(Chessmonger::Behavior::ChessKing)
   end
+
+  it "should allow the starting setup" do
+    @rules.setup @game
+    @rules.allowed?(@game, @game.players.first).should be_true
+  end
+
+  it "should not allow the king to be attacked" do
+    board = @game.board
+    king = double :can_attack? => false
+    # TODO: find a way to improve this
+    king.stub(:kind_of?){ |kind| kind == Chessmonger::Behavior::ChessKing }
+    pawn = double
+    pawn.stub :can_attack? do |game,piece,origin,target|
+      (target.x - origin.x).abs <= 1 and (target.y - origin.y).abs <= 1
+    end
+    # TODO: check with different pieces in various configurations
+    board.put Chessmonger::Piece.new(king, @game.players[0]), board.pos(4, 4)
+    board.put Chessmonger::Piece.new(pawn, @game.players[1]), board.pos(3, 5)
+    board.put Chessmonger::Piece.new(king, @game.players[1]), board.pos(8, 8)
+    board.put Chessmonger::Piece.new(pawn, @game.players[0]), board.pos(7, 7)
+    @rules.allowed?(@game, @game.players[0]).should be_false
+    @rules.allowed?(@game, @game.players[1]).should be_false
+  end
 end

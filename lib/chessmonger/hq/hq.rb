@@ -2,31 +2,24 @@ require 'singleton'
 
 module Chessmonger
 
-  class Rules
-    include Singleton
+  class HQ
 
     def initialize
-      @rules = {}
+      @behaviors = Chessmonger::HQ::Behaviors.new
     end
 
-    def register name, rules
-
-      [
-        :number_of_players, :board_width, :board_height, :playing_direction,
-        :setup, :current_actions, :current_player, :enemy?
-      ].each do |method|
-        raise ArgumentError, "Rules must implement ##{method}" unless rules.respond_to? method
-      end
-
-      @rules[name] = rules
+    def behaviors &block
+      @behaviors.configure(&block) if block
+      @behaviors
     end
 
-    def get name
-      @rules[name]
+    def configure &block
+      @self_before_instance_eval = eval "self", block.binding
+      instance_eval &block
     end
-  end
 
-  def self.rules
-    Rules.instance
+    def method_missing method, *args, &block
+      @self_before_instance_eval.send method, *args, &block
+    end
   end
 end

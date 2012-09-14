@@ -1,7 +1,7 @@
 
 module Chessmonger
 
-  class HQ
+  class Config
 
     class Behaviors
 

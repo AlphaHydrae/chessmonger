@@ -1,13 +1,13 @@
 
-describe 'HQ Rules' do
+describe 'Config Rules' do
 
   before :each do
     @hq = double
     @armory = double
     @armory.stub :configure => @armory
-    Chessmonger::HQ::Armory.stub :new => @armory
-    Chessmonger::HQ::Armory.should_receive(:new).with(@hq)
-    @rules = Chessmonger::HQ::Rules.new @hq
+    Chessmonger::Config::Armory.stub :new => @armory
+    Chessmonger::Config::Armory.should_receive(:new).with(@hq)
+    @rules = Chessmonger::Config::Rules.new @hq
   end
 
   it "should accept an implementation" do

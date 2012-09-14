@@ -1,14 +1,14 @@
 
 module Chessmonger
 
-  class HQ
+  class Config
 
     class Rules
       attr_accessor :implementation
 
       def initialize hq
         @hq = hq
-        @armory = Armory.new hq
+        @armory = Config::Armory.new hq
       end
 
       def armory &block

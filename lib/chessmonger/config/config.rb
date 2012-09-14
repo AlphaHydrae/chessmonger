@@ -1,10 +1,10 @@
 
 module Chessmonger
 
-  class HQ
+  class Config
 
     def initialize
-      @behaviors = HQ::Behaviors.new
+      @behaviors = Config::Behaviors.new
       @rules = {}
     end
 
@@ -14,7 +14,7 @@ module Chessmonger
     end
 
     def rules name, impl = nil, &block
-      @rules[name] = HQ::Rules.new self if impl and !@rules[name]
+      @rules[name] = Config::Rules.new self if impl and !@rules[name]
       @rules[name].implementation = impl if impl
       @rules[name].configure(&block) if block
       @rules[name]

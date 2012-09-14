@@ -2,10 +2,10 @@
 # TODO: implement replace
 #       example: replace 'intKnight', 'jediKnight', :letter => 'k'
 
-describe 'HQ Armory' do
+describe 'Config Armory' do
 
   before :each do
-    @hq = double
+    @config = double
 
     @int_pawn = double
     @int_pawn_options = { :a => 'b', :c => 'd' }
@@ -16,30 +16,30 @@ describe 'HQ Armory' do
     @behaviors.stub :options do |name|
       name == 'intPawn' ? @int_pawn_options : nil
     end
-    @hq.stub :behaviors => @behaviors
+    @config.stub :behaviors => @behaviors
 
     @int = double
-    @hq.stub :rules do |name|
+    @config.stub :rules do |name|
       name == 'international' ? @int : nil
     end
 
-    @armory = Chessmonger::HQ::Armory.new @hq
+    @armory = Chessmonger::Config::Armory.new @config
   end
 
-  it "should use the specified behavior from HQ" do
+  it "should use the specified behavior from the configuration" do
     @behaviors.should_receive(:get).with 'intPawn'
     @armory.use 'intPawn'
     @armory.get('intPawn').should be(@int_pawn)
   end
 
-  it "should copy the options of the behavior from HQ" do
+  it "should copy the options of the behavior from the configuration" do
     @behaviors.should_receive(:options).with 'intPawn'
     @armory.use 'intPawn'
     @armory.options('intPawn').should == @int_pawn_options
     @armory.options('intPawn').should_not be(@int_pawn_options)
   end
 
-  it "should override the options of the behavior from HQ" do
+  it "should override the options of the behavior from the configuration" do
     new_options = { :c => 'e', :f => 'g' }
     @armory.use 'intPawn', new_options
     @armory.options('intPawn').should == @int_pawn_options.merge(new_options)
@@ -47,7 +47,7 @@ describe 'HQ Armory' do
 
   it "should copy an existing armory" do
     
-    existing = Chessmonger::HQ::Armory.new @hq
+    existing = Chessmonger::Config::Armory.new @config
     existing_options = { :c => 'e', :f => 'g' }
     existing.use 'intPawn', existing_options
     @int.stub :armory => existing

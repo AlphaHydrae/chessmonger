@@ -1,8 +1,8 @@
 
-describe 'HQ Behaviors' do
+describe 'Config Behaviors' do
 
   before :each do
-    @behaviors = Chessmonger::HQ::Behaviors.new
+    @behaviors = Chessmonger::Config::Behaviors.new
     @behavior = double
   end
 

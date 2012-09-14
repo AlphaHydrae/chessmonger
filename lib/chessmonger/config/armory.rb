@@ -3,21 +3,21 @@
 
 module Chessmonger
 
-  class HQ
+  class Config
 
     class Armory
 
-      def initialize hq
-        @hq = hq
+      def initialize config
+        @config = config
         @behaviors = {}
       end
 
       def use *args
         name = args.shift
-        behavior = @hq.behaviors.get(name)
+        behavior = @config.behaviors.get(name)
         raise ArgumentError, "No such behavior #{name}" unless behavior
         options = args.last.kind_of?(Hash) ? args.pop : {}
-        options = @hq.behaviors.options(name).merge options
+        options = @config.behaviors.options(name).merge options
         @behaviors[name] = { :behavior => behavior, :options => options }
       end
 
@@ -30,7 +30,7 @@ module Chessmonger
       end
 
       def copy rules_name
-        rules = @hq.rules rules_name
+        rules = @config.rules rules_name
         raise ArgumentError, "No such rules #{rules_name}" unless rules
         rules.armory.names.each do |n|
           use n, rules.armory.options(n)

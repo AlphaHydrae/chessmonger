@@ -11,6 +11,11 @@ describe 'HQ Behaviors' do
     @behaviors.get('aBehavior').should be(@behavior)
   end
 
+  it "should register behaviors with options" do
+    @behaviors.add 'aBehavior', @behavior, :a => 'b', :c => 'd'
+    @behaviors.options('aBehavior').should == { :a => 'b', :c => 'd' }
+  end
+
   it "should replace existing behaviors" do
     other = double
     @behaviors.add 'aBehavior', @behavior
@@ -18,10 +23,18 @@ describe 'HQ Behaviors' do
     @behaviors.get('aBehavior').should be(other)
   end
 
+  it "should replace the options of existing behaviors" do
+    other = double
+    @behaviors.add 'aBehavior', @behavior, :a => 'b', :c => 'd'
+    @behaviors.add 'aBehavior', other, :e => 'f', :g => 'h'
+    @behaviors.options('aBehavior').should == { :e => 'f', :g => 'h' }
+  end
+
   it "should delete behaviors by name" do
     @behaviors.add 'aBehavior', @behavior
     @behaviors.delete 'aBehavior'
     @behaviors.get('aBehavior').should be_nil
+    @behaviors.options('aBehavior').should be_nil
   end
 
   it "should provide the names of registered behaviors" do
@@ -54,6 +67,13 @@ describe 'HQ Behaviors' do
       end
     end
 
+    it "should register behaviors with options" do
+      @behaviors.configure do
+        add 'aBehavior', @behavior, :a => 'b', :c => 'd'
+        options('aBehavior').should == { :a => 'b', :c => 'd' }
+      end
+    end
+
     it "should replace existing behaviors" do
       @behaviors.configure do
         other = double
@@ -63,11 +83,21 @@ describe 'HQ Behaviors' do
       end
     end
 
+    it "should replace the options of existing behaviors" do
+      @behaviors.configure do
+        other = double
+        add 'aBehavior', @behavior, :a => 'b', :c => 'd'
+        add 'aBehavior', other, :e => 'f', :g => 'h'
+        options('aBehavior').should == { :e => 'f', :g => 'h' }
+      end
+    end
+
     it "should delete behaviors by name" do
       @behaviors.configure do
         add 'aBehavior', @behavior
         delete 'aBehavior'
         get('aBehavior').should be_nil
+        options('aBehavior').should be_nil
       end
     end
 

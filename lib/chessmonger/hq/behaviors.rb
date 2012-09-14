@@ -9,12 +9,16 @@ module Chessmonger
         @behaviors = {}
       end
 
-      def add name, behavior
-        @behaviors[name] = behavior
+      def add name, behavior, options = {}
+        @behaviors[name] = { :behavior => behavior, :options => options }
       end
 
       def get name
-        @behaviors[name]
+        @behaviors[name] ? @behaviors[name][:behavior] : nil
+      end
+
+      def options name
+        @behaviors[name] ? @behaviors[name][:options] : nil
       end
 
       def delete name
@@ -26,8 +30,8 @@ module Chessmonger
       end
 
       def identify behavior
-        @behaviors.each_pair do |n,b|
-          if behavior == b or behavior.instance_of?(b)
+        @behaviors.each_pair do |n,v|
+          if behavior == v[:behavior] or behavior.instance_of?(v[:behavior])
             return n
           end
         end

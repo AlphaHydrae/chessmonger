@@ -6,12 +6,16 @@ describe 'HQ Behaviors' do
     @behavior = double
   end
 
-  it "should register a behavior by name" do
+  it "should not return behaviors that have not been registered" do
+    @behaviors.get('aBehavior').should be_nil
+  end
+
+  it "should add a behavior by name" do
     @behaviors.add 'aBehavior', @behavior
     @behaviors.get('aBehavior').should be(@behavior)
   end
 
-  it "should register behaviors with options" do
+  it "should add behaviors with options" do
     @behaviors.add 'aBehavior', @behavior, :a => 'b', :c => 'd'
     @behaviors.options('aBehavior').should == { :a => 'b', :c => 'd' }
   end
@@ -58,58 +62,13 @@ describe 'HQ Behaviors' do
     @behaviors.identify(instance).should == 'aBehavior'
   end
 
-  describe 'DSL' do
-    
-    it "should register a behavior by name" do
-      @behaviors.configure do
-        add 'aBehavior', @behavior
-        get('aBehavior').should be(@behavior)
-      end
-    end
+  def spec_behaviors
+    @behaviors
+  end
 
-    it "should register behaviors with options" do
-      @behaviors.configure do
-        add 'aBehavior', @behavior, :a => 'b', :c => 'd'
-        options('aBehavior').should == { :a => 'b', :c => 'd' }
-      end
-    end
-
-    it "should replace existing behaviors" do
-      @behaviors.configure do
-        other = double
-        add 'aBehavior', @behavior
-        add 'aBehavior', other
-        get('aBehavior').should be(other)
-      end
-    end
-
-    it "should replace the options of existing behaviors" do
-      @behaviors.configure do
-        other = double
-        add 'aBehavior', @behavior, :a => 'b', :c => 'd'
-        add 'aBehavior', other, :e => 'f', :g => 'h'
-        options('aBehavior').should == { :e => 'f', :g => 'h' }
-      end
-    end
-
-    it "should delete behaviors by name" do
-      @behaviors.configure do
-        add 'aBehavior', @behavior
-        delete 'aBehavior'
-        get('aBehavior').should be_nil
-        options('aBehavior').should be_nil
-      end
-    end
-
-    it "should provide the names of registered behaviors" do
-      @behaviors.configure do
-        add 'aBehavior', @behavior
-        add 'anotherBehavior', double
-        names.tap do |names|
-          names.should have(2).items
-          names.should include('aBehavior', 'anotherBehavior')
-        end
-      end
+  it "should be configurable as a DSL" do
+    @behaviors.configure do
+      self.should be(spec_behaviors)
     end
   end
 end

@@ -1,16 +1,23 @@
-require 'singleton'
 
 module Chessmonger
 
   class HQ
 
     def initialize
-      @behaviors = Chessmonger::HQ::Behaviors.new
+      @behaviors = HQ::Behaviors.new
+      @rules = {}
     end
 
     def behaviors &block
       @behaviors.configure(&block) if block
       @behaviors
+    end
+
+    def rules name, impl = nil, &block
+      @rules[name] = HQ::Rules.new self if impl and !@rules[name]
+      @rules[name].implementation = impl if impl
+      @rules[name].configure(&block) if block
+      @rules[name]
     end
 
     def configure &block

@@ -1,50 +1,58 @@
-require 'singleton'
+
+# TODO: improve error messages
 
 module Chessmonger
 
-  class Armory
-    include Singleton
+  class HQ
 
-    def initialize
-      @behaviors = {}
-    end
+    class Armory
 
-    def register behavior, options = {}
-      raise ArgumentError, 'Behavior must respond to :create' unless behavior.respond_to? :create
-      raise ArgumentError, 'Behavior must respond to :name' unless behavior.respond_to? :name
-      name = options[:name] || behavior.name
-      @behaviors[name] = behavior
-    end
+      def initialize hq
+        @hq = hq
+        @behaviors = {}
+      end
 
-    def get name
-      @behaviors[name]
-    end
+      def use *args
+        name = args.shift
+        behavior = @hq.behaviors.get(name)
+        raise ArgumentError, "No such behavior #{name}" unless behavior
+        options = args.last.kind_of?(Hash) ? args.pop : {}
+        options = @hq.behaviors.options(name).merge options
+        @behaviors[name] = { :behavior => behavior, :options => options }
+      end
 
-    def names
-      @behaviors.keys
-    end
+      def get name
+        @behaviors[name] ? @behaviors[name][:behavior] : nil
+      end
 
-    def train name, game, player
-      piece = Chessmonger::Piece.new
-      behavior = @behaviors[name].create game, piece
-      check behavior, name
-      piece.tap do |p|
-        p.player = player
-        p.behavior = behavior
+      def options name
+        @behaviors[name] ? @behaviors[name][:options].dup : nil
+      end
+
+      def copy rules_name
+        rules = @hq.rules rules_name
+        raise ArgumentError, "No such rules #{rules_name}" unless rules
+        rules.armory.names.each do |n|
+          use n, rules.armory.options(n)
+        end
+      end
+
+      def names
+        @behaviors.keys
+      end
+
+      def delete name
+        @behaviors.delete name
+      end
+
+      def configure &block
+        @self_before_instance_eval = eval "self", block.binding
+        instance_eval &block
+      end
+
+      def method_missing method, *args, &block
+        @self_before_instance_eval.send method, *args, &block
       end
     end
-
-    private
-
-    def check behavior, name
-      raise ArgumentError, "Behavior #{name} must respond to :each_action" unless behavior.respond_to?(:each_action)
-      raise ArgumentError, "Behavior #{name} must respond to :can_attack?" unless behavior.respond_to?(:can_attack?)
-      raise ArgumentError, "Behavior #{name} must respond to :name" unless behavior.respond_to?(:name)
-      raise ArgumentError, "Behavior #{name} must respond to :name=" unless behavior.respond_to?(:name=)
-    end
-  end
-
-  def self.armory
-    Armory.instance
   end
 end

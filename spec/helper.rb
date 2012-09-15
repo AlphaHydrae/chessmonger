@@ -15,6 +15,26 @@ SimpleCov.start
 require 'rspec'
 require 'chessmonger'
 
+module NotationSpecGenerator
+  
+  def they_should_be_the_same_game g1, g2
+    g1.status.should == g2.status
+    # FIXME: this should be an equality check on the rules, not on their class
+    g1.rules.class.should == g2.rules.class
+    g1.players.each_with_index do |p,i|
+      g2.players[i].name.should == p.name
+    end
+    g1.history.length.should == g2.history.length
+    g1.history.each_with_index do |action,i|
+      original = g2.history[i]
+      action.player.name.should == original.player.name
+      g1.players.index(action.player).should == g2.players.index(original.player)
+      action.origin.should == original.origin
+      action.target.should == original.target
+    end
+  end
+end
+
 module RulesSpecGenerator
 
   def its_board_dimensions_should_be width, height

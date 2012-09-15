@@ -1,6 +1,6 @@
 
 # TODO: check every parse error
-# TODO: add line number to parse errors
+# TODO: check move format
 
 describe 'CMGN' do
 
@@ -11,43 +11,89 @@ describe 'CMGN' do
     @rules.setup @game
   end
 
-  it "should raise a parse error if the first line has the wrong format" do
-    [ 'CMGN', 'CMGN a', 'fubar' ].each do |invalid|
-      lambda{ Chessmonger::IO::CMGN.load(invalid) }.should raise_error(Chessmonger::IO::ParseError)
-    end
-  end
+  describe 'configured' do
+    include NotationSpecGenerator
 
-  it "should raise an unsupported version error if the version is unexpected" do
-    lambda{ Chessmonger::IO::CMGN.load('CMGN 42') }.should raise_error(Chessmonger::IO::UnsupportedVersionError)
-  end
-
-  it "should save and load an empty game correctly" do
-    copy = Chessmonger::IO::CMGN.load(Chessmonger::IO::CMGN.save(@game))
-    copy.status.should == @game.status
-    # FIXME: this should be an equality check on the rules, not on their class
-    copy.rules.class.should == @game.rules.class
-    copy.players.each_with_index do |p,i|
-      @game.players[i].name.should == p.name
+    before :each do
+      @notation = Chessmonger::IO::CMGN.new
+      @rules_serializer = double :save => 'InternationalChess', :load => Chessmonger::Variants::InternationalChess.new
+      @piece_serializer = double
+      @piece_serializer.stub :save do |piece,game|
+        if piece.behavior.instance_of? Chessmonger::Behavior::ChessPawn
+          'p'
+        elsif piece.behavior.instance_of? Chessmonger::Behavior::ChessKing
+          'k'
+        end
+      end
+      @piece_serializer.stub :load do |string,game|
+        case string
+        when 'p'; return Chessmonger::Behavior::ChessPawn.new
+        when 'k'; return Chessmonger::Behavior::ChessKing.new
+        end
+      end
     end
-    copy.history.length.should == 0
-  end
 
-  it "should save and load an ongoing game correctly" do
-    5.times{ @game.play @game.current_actions.sample }
-    copy = Chessmonger::IO::CMGN.load(Chessmonger::IO::CMGN.save(@game))
-    copy.status.should == @game.status
-    # FIXME: this should be an equality check on the rules, not on their class
-    copy.rules.class.should == @game.rules.class
-    copy.players.each_with_index do |p,i|
-      @game.players[i].name.should == p.name
+    it "should raise a config error if no rules serializer has been set" do
+      @notation.piece_serializer = @piece_serializer
+      lambda{ @notation.load("") }.should raise_error(Chessmonger::IO::ConfigError)
     end
-    copy.history.length.should == @game.history.length
-    copy.history.each_with_index do |action,i|
-      original = @game.history[i]
-      action.player.name.should == original.player.name
-      copy.players.index(action.player).should == @game.players.index(original.player)
-      action.origin.should == original.origin
-      action.target.should == original.target
+
+    describe 'with serializers' do
+
+      before :each do
+        @notation.rules_serializer = @rules_serializer
+        @notation.piece_serializer = @piece_serializer
+      end
+
+      it "should save the rules" do
+        @rules_serializer.should_receive(:save).with @game.rules
+        @notation.save @game
+      end
+
+      it "should load the rules" do
+        @rules_serializer.should_receive(:load).with 'InternationalChess'
+        @notation.load "CMGN 1\nRules InternationalChess\nP1 John Doe\nP2 Jane Doe"
+      end
+
+      it "should raise a parse error for an empty file" do
+        lambda{ @notation.load("") }.should raise_error(Chessmonger::IO::ParseError){ |e| e.line.should be_nil }
+      end
+
+      it "should raise a parse error if the first line has the wrong format" do
+        [ 'CMGN', 'CMGN a', 'fubar' ].each do |invalid|
+          lambda{ @notation.load(invalid) }.should raise_error(Chessmonger::IO::ParseError){ |e| e.line.should == 1 }
+        end
+      end
+
+      it "should raise an unsupported version error if the version is unexpected" do
+        lambda{ @notation.load('CMGN 42') }.should raise_error(Chessmonger::IO::UnsupportedVersionError){ |e| e.line.should == 1 }
+      end
+
+      it "should raise a parse error if a header has the wrong format" do
+        [ "CMGN 1\nfubar", "CMGN 1\nH1 correct\n ", "CMGN 1\nH1 correct\nH2 correct\n$$" ].each_with_index do |invalid,i|
+          lambda{ @notation.load(invalid) }.should raise_error(Chessmonger::IO::ParseError){ |e| e.line.should == i + 2 }
+        end
+      end
+
+      it "should raise an error if the rules header is missing" do
+        invalid = "CMGN 1\nP1 John Doe\nP2 Jane Doe"
+        lambda{ @notation.load(invalid) }.should raise_error(Chessmonger::IO::HeaderError){ |e| e.header.should == 'Rules' }
+      end
+
+      it "should save and load an empty game correctly" do
+        save = @notation.save @game
+        copy = @notation.load save
+        they_should_be_the_same_game copy, @game
+        @notation.save(copy).should == save
+      end
+
+      it "should save and load an ongoing game correctly" do
+        5.times{ @game.play @game.current_actions.sample }
+        save = @notation.save @game
+        copy = @notation.load save
+        they_should_be_the_same_game copy, @game
+        @notation.save(copy).should == save
+      end
     end
   end
 end

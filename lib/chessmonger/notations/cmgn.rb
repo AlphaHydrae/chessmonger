@@ -20,8 +20,9 @@ module Chessmonger
           player = game.players.index(action.player) + 1
           piece = piece_serializer.save action.piece, game
           origin = "#{action.origin.x},#{action.origin.y}"
+          separator = action.capture ? 'x' : '-'
           target = "#{action.target.x},#{action.target.y}"
-          contents << "\n#{player}. #{piece}:#{origin}-#{target}"
+          contents << "\n#{player}. #{piece}:#{origin}#{separator}#{target}"
         end
         contents
       end
@@ -79,7 +80,7 @@ module Chessmonger
         rules.setup game
 
         lines.each do |line|
-          m = line.match /^\d+\. [a-z]\:(\d+),(\d+)\-(\d+),(\d+)$/
+          m = line.match /^\d+\. [a-z]\:(\d+),(\d+)[x\-](\d+),(\d+)$/
           error ParseError, %/Bad action format/ unless m
           origin = game.board.pos m[1].to_i, m[2].to_i
           error ParseError, %/Unknown position #{m[1]},#{m[2]}/ unless origin

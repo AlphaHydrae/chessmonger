@@ -3,28 +3,6 @@ module Chessmonger
 
   module Notations
 
-    class ConfigError < RuntimeError; end
-
-    class ParseError < RuntimeError
-      attr_reader :line
-
-      def initialize line = nil, msg = nil
-        super msg
-        @line = line
-      end
-    end
-
-    class HeaderError < ParseError
-      attr_reader :header
-
-      def initialize header, line = nil, msg = nil
-        super line, msg
-        @header = header
-      end
-    end
-
-    class UnsupportedVersionError < ParseError; end
-
     class CMGN
       VERSION = 1
 
@@ -57,14 +35,14 @@ module Chessmonger
         lines = contents.split "\n"
 
         if lines.empty?
-          error "No contents found"
+          error ParseError, "No contents found"
         end
 
         # check version
         @line = 1
         version_line = lines.shift
         unless m = version_line.match(/^CMGN (\d+)/)
-          error %/First line must be "CMGN n" where n is the format version number/
+          error ParseError, %/First line must be "CMGN n" where n is the format version number/
         end
         version = m[1].to_i
         if version != 1
@@ -77,13 +55,13 @@ module Chessmonger
           @line += 1
           m = lines.shift.match(/^([A-Za-z0-9]+) (.*)$/)
           if !m
-            error %/Expected a header or an empty line, got "#{lines.first}"/
+            error ParseError, %/Expected a header or an empty line, got "#{lines.first}"/
           end
           headers[m[1]] = m[2]
         end
 
         if !headers['Rules']
-          header_error 'Rules', %/Missing header "Rules"/
+          error HeaderError, %/Missing header "Rules"/, :header => 'Rules'
         end
 
         # remove empty line
@@ -102,13 +80,13 @@ module Chessmonger
 
         lines.each do |line|
           m = line.match /^\d+\. [a-z]\:(\d+),(\d+)\-(\d+),(\d+)$/
-          raise ParseError, %/Bad action format/ unless m
+          error ParseError, %/Bad action format/ unless m
           origin = game.board.pos m[1].to_i, m[2].to_i
-          raise ParseError, %/Unknown position #{m[1]},#{m[2]}/ unless origin
+          error ParseError, %/Unknown position #{m[1]},#{m[2]}/ unless origin
           target = game.board.pos m[3].to_i, m[4].to_i
-          raise ParseError, %/Unknown position #{m[3]},#{m[4]}/ unless target
+          error ParseError, %/Unknown position #{m[3]},#{m[4]}/ unless target
           action = game.current_actions.find{ |a| a.origin == origin and a.target == target }
-          raise ParseError, %/Unknown action/ unless action
+          error ParseError, %/Unknown action/ unless action
           game.play action
         end
 
@@ -117,14 +95,12 @@ module Chessmonger
 
       private
 
-      def header_error header, msg = nil
-        raise HeaderError.new header, @line, msg
-      end
-
-      def error *args
-        type, msg = ParseError, args.shift
-        type, msg = msg, args.shift if msg.kind_of? Class
-        raise type.new @line, msg
+      def error type, msg, options = {}
+        e = type.new msg
+        { :line => @line }.merge(options).each_pair do |k,v|
+          e.send "#{k}=", v
+        end
+        raise e
       end
     end
   end

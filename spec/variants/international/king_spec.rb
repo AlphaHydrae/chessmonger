@@ -14,7 +14,7 @@ describe 'Chess King' do
     @p2 = Chessmonger::Player.new 'Jane Doe'
     @game = Chessmonger::Game.new @rules, [ @p1, @p2 ]
 
-    @behavior = Chessmonger::Behavior::ChessKing.new
+    @behavior = Chessmonger::Variants::InternationalChess::King.new
     @king = Chessmonger::Piece.new
     @king.player = @p1
     @king.behavior = @behavior

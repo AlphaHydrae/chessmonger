@@ -14,7 +14,7 @@ describe 'Chess Pawn' do
     @p2 = Chessmonger::Player.new 'Jane Doe'
     @game = Chessmonger::Game.new @rules, [ @p1, @p2 ]
 
-    @behavior = Chessmonger::Behavior::ChessPawn.new
+    @behavior = Chessmonger::Variants::InternationalChess::Pawn.new
     @pawn = Chessmonger::Piece.new
     @pawn.player = @p1
     @pawn.behavior = @behavior

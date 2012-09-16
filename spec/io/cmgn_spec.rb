@@ -19,16 +19,16 @@ describe 'CMGN' do
       @rules_serializer = double :save => 'InternationalChess', :load => Chessmonger::Variants::InternationalChess.new
       @piece_serializer = double
       @piece_serializer.stub :save do |piece,game|
-        if piece.behavior.instance_of? Chessmonger::Behavior::ChessPawn
+        if piece.behavior.instance_of? Chessmonger::Variants::InternationalChess::Pawn
           'p'
-        elsif piece.behavior.instance_of? Chessmonger::Behavior::ChessKing
+        elsif piece.behavior.instance_of? Chessmonger::Variants::InternationalChess::King
           'k'
         end
       end
       @piece_serializer.stub :load do |string,game|
         case string
-        when 'p'; return Chessmonger::Behavior::ChessPawn.new
-        when 'k'; return Chessmonger::Behavior::ChessKing.new
+        when 'p'; return Chessmonger::Variants::InternationalChess::Pawn.new
+        when 'k'; return Chessmonger::Variants::InternationalChess::King.new
         end
       end
     end

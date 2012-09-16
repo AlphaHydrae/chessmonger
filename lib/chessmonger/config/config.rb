@@ -6,6 +6,7 @@ module Chessmonger
     def initialize
       @behaviors = Config::Behaviors.new
       @rules = {}
+      @notations = {}
     end
 
     def behaviors &block
@@ -18,6 +19,21 @@ module Chessmonger
       @rules[name].implementation = impl if impl
       @rules[name].configure(&block) if block
       @rules[name]
+    end
+
+    def rule_names
+      @rules.keys
+    end
+
+    def notation name, impl = nil, &block
+      @notations[name] = Config::Notation.new self if impl and !@notations[name]
+      @notations[name].implementation = impl if impl
+      @notations[name].configure(&block) if block
+      @notations[name]
+    end
+
+    def notation_names
+      @notations.keys
     end
 
     def configure &block

@@ -10,6 +10,9 @@ describe 'Config' do
     @rules = double
     @rules.stub :configure => @rules
     Chessmonger::Config::Rules.stub :new => @rules
+    @notation = double
+    @notation.stub :configure => @notation
+    Chessmonger::Config::Notation.stub :new => @notation
     @config = Chessmonger::Config.new
   end
 
@@ -32,7 +35,6 @@ describe 'Config' do
     @rules.stub :implementation= => nil
     @rules.stub :implementation => impl
     @config.rules 'international', impl
-    @config.rules('international').should_not be_nil
     @config.rules('international').implementation.should be(impl)
   end
 
@@ -49,12 +51,60 @@ describe 'Config' do
     @config.rules('international').implementation.should be(impl2)
   end
 
+  it "should return the names of registered rules" do
+    impl1, impl2 = double, double
+    @rules.stub :implementation= => nil
+    @rules.stub :implementation => impl1
+    @config.rules 'r1', impl1
+    @config.rules 'r2', impl2
+    @config.rule_names.tap do |names|
+      names.should have(2).items
+      names.should include('r1', 'r2')
+    end
+  end
+
   it "should allow rules to be configured" do
     impl = double
     @rules.stub :implementation= => nil
     @rules.stub :implementation => impl
     @rules.should_receive(:configure).and_yield
     @config.rules 'international', impl do; end
+  end
+
+  it "should register notations" do
+    impl = double
+    Chessmonger::Config::Notation.should_receive(:new).with(@config)
+    @notation.stub :implementation= => nil
+    @config.notation 'cmgn', impl
+  end
+
+  it "should replace existing notations" do
+    impl1 = double
+    impl2 = double
+    Chessmonger::Config::Notation.should_receive(:new).with(@config)
+    @notation.stub :implementation= => nil
+    @notation.should_receive(:implementation=).with(impl1)
+    @notation.should_receive(:implementation=).with(impl2)
+    @config.notation 'cmgn', impl1
+    @config.notation 'cmgn', impl2
+  end
+
+  it "should return the names of registered notations" do
+    impl1, impl2 = double, double
+    @notation.stub :implementation= => nil
+    @config.notation 'cmgn', impl1
+    @config.notation 'pgn', impl2
+    @config.notation_names.tap do |names|
+      names.should have(2).items
+      names.should include('cmgn', 'pgn')
+    end
+  end
+
+  it "should allow notations to be configured" do
+    impl = double
+    @notation.stub :implementation= => nil
+    @notation.should_receive(:configure).and_yield
+    @config.notation 'cmgn', impl do; end
   end
 
   def spec_config

@@ -15,7 +15,7 @@ describe 'CMGN' do
     include NotationSpecGenerator
 
     before :each do
-      @notation = Chessmonger::IO::CMGN.new
+      @notation = Chessmonger::Notations::CMGN.new
       @rules_serializer = double :save => 'InternationalChess', :load => Chessmonger::Variants::InternationalChess.new
       @piece_serializer = double
       @piece_serializer.stub :save do |piece,game|
@@ -35,7 +35,7 @@ describe 'CMGN' do
 
     it "should raise a config error if no rules serializer has been set" do
       @notation.piece_serializer = @piece_serializer
-      lambda{ @notation.load("") }.should raise_error(Chessmonger::IO::ConfigError)
+      lambda{ @notation.load("") }.should raise_error(Chessmonger::Notations::ConfigError)
     end
 
     describe 'with serializers' do
@@ -56,28 +56,28 @@ describe 'CMGN' do
       end
 
       it "should raise a parse error for an empty file" do
-        lambda{ @notation.load("") }.should raise_error(Chessmonger::IO::ParseError){ |e| e.line.should be_nil }
+        lambda{ @notation.load("") }.should raise_error(Chessmonger::Notations::ParseError){ |e| e.line.should be_nil }
       end
 
       it "should raise a parse error if the first line has the wrong format" do
         [ 'CMGN', 'CMGN a', 'fubar' ].each do |invalid|
-          lambda{ @notation.load(invalid) }.should raise_error(Chessmonger::IO::ParseError){ |e| e.line.should == 1 }
+          lambda{ @notation.load(invalid) }.should raise_error(Chessmonger::Notations::ParseError){ |e| e.line.should == 1 }
         end
       end
 
       it "should raise an unsupported version error if the version is unexpected" do
-        lambda{ @notation.load('CMGN 42') }.should raise_error(Chessmonger::IO::UnsupportedVersionError){ |e| e.line.should == 1 }
+        lambda{ @notation.load('CMGN 42') }.should raise_error(Chessmonger::Notations::UnsupportedVersionError){ |e| e.line.should == 1 }
       end
 
       it "should raise a parse error if a header has the wrong format" do
         [ "CMGN 1\nfubar", "CMGN 1\nH1 correct\n ", "CMGN 1\nH1 correct\nH2 correct\n$$" ].each_with_index do |invalid,i|
-          lambda{ @notation.load(invalid) }.should raise_error(Chessmonger::IO::ParseError){ |e| e.line.should == i + 2 }
+          lambda{ @notation.load(invalid) }.should raise_error(Chessmonger::Notations::ParseError){ |e| e.line.should == i + 2 }
         end
       end
 
       it "should raise an error if the rules header is missing" do
         invalid = "CMGN 1\nP1 John Doe\nP2 Jane Doe"
-        lambda{ @notation.load(invalid) }.should raise_error(Chessmonger::IO::HeaderError){ |e| e.header.should == 'Rules' }
+        lambda{ @notation.load(invalid) }.should raise_error(Chessmonger::Notations::HeaderError){ |e| e.header.should == 'Rules' }
       end
 
       it "should save and load an empty game correctly" do

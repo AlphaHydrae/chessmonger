@@ -1,7 +1,7 @@
 
 module Chessmonger
 
-  module IO
+  module Notations
 
     class ConfigError < RuntimeError; end
 

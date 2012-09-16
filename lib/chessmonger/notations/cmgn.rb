@@ -10,11 +10,14 @@ module Chessmonger
       attr_accessor :piece_serializer
 
       def save game
+        check_config!
+
         contents = String.new
         contents << "CMGN #{VERSION}"
         contents << "\nRules #{@rules_serializer.save(game.rules)}"
         game.players.each_with_index{ |p,i| contents << "\nP#{i + 1} #{p.name}" }
         contents << "\n"
+
         game.history.each do |action|
           # TODO: add action registration
           player = game.players.index(action.player) + 1
@@ -24,13 +27,15 @@ module Chessmonger
           target = "#{action.target.x},#{action.target.y}"
           contents << "\n#{player}. #{piece}:#{origin}#{separator}#{target}"
         end
+
         contents
       end
 
       def load contents
+        check_config!
 
-        if !rules_serializer
-          raise ConfigError, 'A rules serializer must be set'
+        if contents.nil?
+          error ParseError, "Cannot parse nil"
         end
 
         lines = contents.split "\n"
@@ -86,7 +91,9 @@ module Chessmonger
           error ParseError, %/Unknown position #{m[1]},#{m[2]}/ unless origin
           target = game.board.pos m[3].to_i, m[4].to_i
           error ParseError, %/Unknown position #{m[3]},#{m[4]}/ unless target
-          action = game.current_actions.find{ |a| a.origin == origin and a.target == target }
+          action = game.current_actions.find do |a|
+            a.origin == origin and a.target == target
+          end
           error ParseError, %/Unknown action/ unless action
           game.play action
         end
@@ -95,6 +102,18 @@ module Chessmonger
       end
 
       private
+
+      def check_config!
+        if !@rules_serializer
+          config_error 'No rules serializer has been set', :rules_serializer
+        elsif !@piece_serializer
+          config_error 'No piece serializer has been set', :piece_serializer
+        end
+      end
+
+      def config_error msg, config
+        raise ConfigError.new(msg).tap{ |e| e.config = config }
+      end
 
       def error type, msg, options = {}
         e = type.new msg

@@ -3,9 +3,13 @@ module Chessmonger
 
   module Notations
 
-    class ConfigError < RuntimeError; end
+    class Error < RuntimeError; end
 
-    class ParseError < RuntimeError
+    class ConfigError < Error
+      attr_accessor :config
+    end
+
+    class ParseError < Error
       attr_accessor :line
     end
 

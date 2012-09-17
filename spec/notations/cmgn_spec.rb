@@ -17,8 +17,8 @@ describe 'CMGN' do
     @piece_serializer.stub :save do |piece,game|
       if piece.behavior.instance_of? Chessmonger::Variants::InternationalChess::Pawn
         'p'
-      elsif piece.behavior.instance_of? Chessmonger::Variants::InternationalChess::King
-        'k'
+      #elsif piece.behavior.instance_of? Chessmonger::Variants::InternationalChess::King
+      #  'k'
       end
     end
     #@piece_serializer.stub :load do |string,game|
@@ -94,7 +94,8 @@ describe 'CMGN' do
     end
 
     it "should save and load an ongoing game correctly" do
-      5.times{ @game.play @game.current_actions.sample }
+      # TODO: test a manual sequence of moves
+      5.times{ @game.play @game.current_actions.shuffle.find{ |a| a.piece.behavior.instance_of?(Chessmonger::Variants::InternationalChess::Pawn) } }
       save = @notation.save @game
       copy = @notation.load save
       they_should_be_the_same_game copy, @game

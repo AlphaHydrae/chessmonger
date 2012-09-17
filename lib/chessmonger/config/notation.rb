@@ -18,7 +18,7 @@ module Chessmonger
       end
 
       def variants *names
-        registered = @config.rule_names
+        registered = @config.variant_names
         names.each do |name|
           raise ArgumentError, "Unknown variant #{name}" unless registered.include? name
         end

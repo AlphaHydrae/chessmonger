@@ -20,8 +20,8 @@ describe 'Config Notation' do
   end
 
   it "should allow supported variants to be specified" do
-    @config.stub :rule_names => [ 'v1', 'v2', 'v3' ]
-    @config.should_receive :rule_names
+    @config.stub :variant_names => [ 'v1', 'v2', 'v3' ]
+    @config.should_receive :variant_names
     @notation.variants 'v1', 'v2'
     @notation.supported_variants.tap do |names|
       names.should have(2).items
@@ -30,8 +30,8 @@ describe 'Config Notation' do
   end
 
   it "should not accept variants that have not been registered" do
-    @config.stub :rule_names => [ 'v1', 'v2', 'v3' ]
-    @config.should_receive :rule_names
+    @config.stub :variant_names => [ 'v1', 'v2', 'v3' ]
+    @config.should_receive :variant_names
     lambda{ @notation.variants 'v3', 'v4' }.should raise_error(ArgumentError)
   end
 

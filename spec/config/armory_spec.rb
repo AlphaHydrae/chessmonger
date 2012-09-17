@@ -62,6 +62,18 @@ describe 'Config Armory' do
     @armory.names.should == [ 'intPawn' ]
   end
 
+  it "should identify a registered behavior" do
+    @armory.use 'intPawn'
+    @armory.identify(@int_pawn).should == 'intPawn'
+  end
+
+  it "should identify an instance of a registered behavior" do
+    instance = double
+    instance.stub(:instance_of?){ |type| type == @int_pawn }
+    @armory.use 'intPawn'
+    @armory.identify(instance).should == 'intPawn'
+  end
+
   it "should delete behaviors by name" do
     @armory.use 'intPawn'
     @armory.delete 'intPawn'

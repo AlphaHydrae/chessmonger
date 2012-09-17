@@ -41,6 +41,15 @@ module Chessmonger
         @behaviors.keys
       end
 
+      def identify behavior
+        @behaviors.each_pair do |n,v|
+          if behavior == v[:behavior] or behavior.instance_of?(v[:behavior])
+            return n
+          end
+        end
+        nil
+      end
+
       def delete name
         @behaviors.delete name
       end

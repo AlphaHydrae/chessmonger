@@ -17,16 +17,11 @@ describe 'CMGN' do
     @piece_serializer.stub :save do |piece,game|
       if piece.behavior.instance_of? Chessmonger::Variants::InternationalChess::Pawn
         'p'
-      #elsif piece.behavior.instance_of? Chessmonger::Variants::InternationalChess::King
-      #  'k'
       end
     end
-    #@piece_serializer.stub :load do |string,game|
-    #  case string
-    #  when 'p'; return Chessmonger::Variants::InternationalChess::Pawn.new
-    #  when 'k'; return Chessmonger::Variants::InternationalChess::King.new
-    #  end
-    #end
+    @piece_serializer.stub :match? do |piece,name|
+      piece.behavior.instance_of?(Chessmonger::Variants::InternationalChess::Pawn) and name == 'p'
+    end
     @notation.rules_serializer = @rules_serializer
     @notation.piece_serializer = @piece_serializer
   end
@@ -54,6 +49,22 @@ describe 'CMGN' do
     it "should load the rules" do
       @rules_serializer.should_receive(:load).with 'InternationalChess'
       @notation.load "CMGN 1\nRules InternationalChess\nP1 John Doe\nP2 Jane Doe"
+    end
+
+    it "should save the pieces" do
+      @game.play @game.current_actions.find{ |a| a.piece.behavior.instance_of?(Chessmonger::Variants::InternationalChess::Pawn) }
+      @piece_serializer.should_receive :save do |piece|
+        piece.behavior.should be_an_instance_of(Chessmonger::Variants::InternationalChess::Pawn)
+      end
+      @notation.save @game
+    end
+
+    it "should match the pieces when loading" do
+      @piece_serializer.should_receive :match? do |piece,name|
+        piece.behavior.should be_an_instance_of(Chessmonger::Variants::InternationalChess::Pawn)
+        name.should == 'p'
+      end
+      @notation.load "CMGN 1\nRules InternationalChess\nP1 John Doe\nP2 Jane Doe\n\n1. p:4,2-4,3"
     end
 
     it "should raise a parse error for an empty file" do

@@ -21,7 +21,7 @@ module Chessmonger
         game.history.each do |action|
           # TODO: add action registration
           player = game.players.index(action.player) + 1
-          piece = piece_serializer.save action.piece, game
+          piece = @piece_serializer.save action.piece, game
           origin = "#{action.origin.x},#{action.origin.y}"
           separator = action.capture ? 'x' : '-'
           target = "#{action.target.x},#{action.target.y}"
@@ -85,16 +85,19 @@ module Chessmonger
         rules.setup game
 
         lines.each do |line|
-          m = line.match /^\d+\. [a-z]\:(\d+),(\d+)[x\-](\d+),(\d+)$/
+          m = line.match /^\d+\. ([a-z])\:(\d+),(\d+)[x\-](\d+),(\d+)$/
+          behavior_letter = m[1]
+          ox, oy, tx, ty = m[2], m[3], m[4], m[5]
           error ParseError, %/Bad action format/ unless m
-          origin = game.board.pos m[1].to_i, m[2].to_i
-          error ParseError, %/Unknown position #{m[1]},#{m[2]}/ unless origin
-          target = game.board.pos m[3].to_i, m[4].to_i
-          error ParseError, %/Unknown position #{m[3]},#{m[4]}/ unless target
+          origin = game.board.pos ox.to_i, oy.to_i
+          error ParseError, %/Unknown position #{ox},#{oy}/ unless origin
+          target = game.board.pos tx.to_i, ty.to_i
+          error ParseError, %/Unknown position #{tx},#{ty}/ unless target
           action = game.current_actions.find do |a|
             a.origin == origin and a.target == target
           end
-          error ParseError, %/Unknown action/ unless action
+          error ParseError, %/Unknown action #{line}/ unless action
+          error ParseError, %/Unknown piece #{behavior_letter}/ unless @piece_serializer.match? action.piece, behavior_letter, game
           game.play action
         end
 

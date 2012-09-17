@@ -5,7 +5,7 @@ module Chessmonger
 
     def initialize
       @behaviors = Config::Behaviors.new
-      @rules = {}
+      @variants = {}
       @notations = {}
     end
 
@@ -14,15 +14,15 @@ module Chessmonger
       @behaviors
     end
 
-    def rules name, impl = nil, &block
-      @rules[name] = Config::Rules.new self if impl and !@rules[name]
-      @rules[name].implementation = impl if impl
-      @rules[name].configure(&block) if block
-      @rules[name]
+    def variant name, impl = nil, &block
+      @variants[name] = Config::Variant.new self if impl and !@variants[name]
+      @variants[name].implementation = impl if impl
+      @variants[name].configure(&block) if block
+      @variants[name]
     end
 
-    def rule_names
-      @rules.keys
+    def variant_names
+      @variants.keys
     end
 
     def notation name, impl = nil, &block

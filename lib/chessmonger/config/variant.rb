@@ -3,12 +3,12 @@ module Chessmonger
 
   class Config
 
-    class Rules
+    class Variant
       attr_accessor :implementation
 
-      def initialize hq
-        @hq = hq
-        @armory = Config::Armory.new hq
+      def initialize config
+        @config = config
+        @armory = Config::Armory.new config
       end
 
       def armory &block

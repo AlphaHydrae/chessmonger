@@ -1,5 +1,5 @@
 
-describe 'Config Notations' do
+describe 'Config Notation' do
 
   before :each do
     @config = double

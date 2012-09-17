@@ -48,6 +48,7 @@ module Chessmonger
       def configure &block
         @self_before_instance_eval = eval "self", block.binding
         instance_eval &block
+        @self_before_instance_eval = nil
       end
 
       def method_missing method, *args, &block

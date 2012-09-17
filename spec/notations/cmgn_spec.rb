@@ -27,27 +27,24 @@ describe 'CMGN' do
     #  when 'k'; return Chessmonger::Variants::InternationalChess::King.new
     #  end
     #end
+    @notation.rules_serializer = @rules_serializer
+    @notation.piece_serializer = @piece_serializer
   end
 
   it "should raise a config error if no rules serializer has been set" do
-    @notation.piece_serializer = @piece_serializer
+    @notation.rules_serializer = nil
     lambda{ @notation.load(nil) }.should raise_error(Chessmonger::Notations::ConfigError){ |e| e.config.should == :rules_serializer }
     lambda{ @notation.save(nil) }.should raise_error(Chessmonger::Notations::ConfigError){ |e| e.config.should == :rules_serializer }
   end
 
   it "should raise a config error if no piece serializer has been set" do
-    @notation.rules_serializer = @rules_serializer
+    @notation.piece_serializer = nil
     lambda{ @notation.load(nil) }.should raise_error(Chessmonger::Notations::ConfigError){ |e| e.config.should == :piece_serializer }
     lambda{ @notation.save(nil) }.should raise_error(Chessmonger::Notations::ConfigError){ |e| e.config.should == :piece_serializer }
   end
 
   describe 'configured' do
     include NotationSpecGenerator
-
-    before :each do
-      @notation.rules_serializer = @rules_serializer
-      @notation.piece_serializer = @piece_serializer
-    end
 
     it "should save the rules" do
       @rules_serializer.should_receive(:save).with @game.rules

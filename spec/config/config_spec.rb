@@ -51,6 +51,25 @@ describe 'Config' do
     @config.variant('international').implementation.should be(impl2)
   end
 
+  it "should identify registered variants" do
+    impl = double
+    Chessmonger::Config::Variant.should_receive(:new).with(@config)
+    @variant.stub :implementation= => nil
+    @variant.stub :implementation => impl
+    @variant.should_receive :implementation
+    @config.variant 'international', impl
+    @config.identify(impl).should == 'international'
+  end
+
+  it "should not identify unregistered variants" do
+    impl = double
+    Chessmonger::Config::Variant.should_receive(:new).with(@config)
+    @variant.stub :implementation= => nil
+    @variant.stub :implementation => impl
+    @config.variant 'international', impl
+    @config.identify(Object.new).should be_nil
+  end
+
   it "should return the names of registered variants" do
     impl1, impl2 = double, double
     @variant.stub :implementation= => nil

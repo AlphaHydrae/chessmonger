@@ -47,6 +47,10 @@ describe 'Game' do
       Chessmonger::Game.new(@rules, @players).history.should be_empty
     end
 
+    it "should have no captures" do
+      Chessmonger::Game.new(@rules, @players).captures.should be_empty
+    end
+
     it "should only accept the number of players defined by the rules" do
       [ [], @players[0, 1], (@players.dup << @p3) ].each do |invalid|
         lambda{ Chessmonger::Game.new(@rules, invalid) }.should raise_error(ArgumentError)

@@ -3,7 +3,7 @@ module Chessmonger
 
   class Game
 
-    attr_reader :rules, :players, :board, :history, :status
+    attr_reader :rules, :players, :board, :history, :status, :captures
 
     def initialize rules, players
 
@@ -13,6 +13,7 @@ module Chessmonger
 
       @board = Board.new rules.board_width, rules.board_height
       @history = []
+      @captures = {}
       @status = :ongoing
     end
 

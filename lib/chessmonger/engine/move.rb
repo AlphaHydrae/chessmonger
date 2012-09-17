@@ -11,7 +11,7 @@ module Chessmonger
 
     def play game
       game.board.move @origin, @target
-      game.captures[@player] << @capture if @capture
+      (game.captures[@player] ||= []) << @capture if @capture
     end
 
     def cancel game

@@ -25,6 +25,13 @@ module Chessmonger
       @variants.keys
     end
 
+    def identify impl
+      @variants.each_pair do |name,variant|
+        return name if variant.implementation == impl
+      end
+      nil
+    end
+
     def notation name, impl = nil, &block
       @notations[name] = Config::Notation.new self if impl and !@notations[name]
       @notations[name].implementation = impl if impl
@@ -39,6 +46,7 @@ module Chessmonger
     def configure &block
       @self_before_instance_eval = eval "self", block.binding
       instance_eval &block
+      @self_before_instance_eval = nil
     end
 
     def method_missing method, *args, &block

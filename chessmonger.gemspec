@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
-  s.date = "2012-09-12"
+  s.date = "2012-09-17"
   s.description = "Extensible grid game engine in Ruby."
   s.email = "hydrae.alpha@gmail.com"
   s.extra_rdoc_files = [
@@ -28,9 +28,12 @@ Gem::Specification.new do |s|
     "VERSION",
     "chessmonger.gemspec",
     "lib/chessmonger.rb",
-    "lib/chessmonger/core.rb",
-    "lib/chessmonger/core/armory.rb",
-    "lib/chessmonger/core/rules.rb",
+    "lib/chessmonger/config.rb",
+    "lib/chessmonger/config/armory.rb",
+    "lib/chessmonger/config/behaviors.rb",
+    "lib/chessmonger/config/config.rb",
+    "lib/chessmonger/config/notation.rb",
+    "lib/chessmonger/config/variant.rb",
     "lib/chessmonger/engine.rb",
     "lib/chessmonger/engine/action.rb",
     "lib/chessmonger/engine/board.rb",
@@ -40,15 +43,24 @@ Gem::Specification.new do |s|
     "lib/chessmonger/engine/piece.rb",
     "lib/chessmonger/engine/player.rb",
     "lib/chessmonger/engine/position.rb",
-    "lib/chessmonger/io.rb",
-    "lib/chessmonger/io/cmgn.rb",
+    "lib/chessmonger/notations.rb",
+    "lib/chessmonger/notations/cmgn.rb",
+    "lib/chessmonger/notations/errors.rb",
+    "lib/chessmonger/rulebook.rb",
+    "lib/chessmonger/rulebook/book.rb",
+    "lib/chessmonger/rulebook/letter_serializer.rb",
+    "lib/chessmonger/rulebook/rules_serializer.rb",
     "lib/chessmonger/variants.rb",
     "lib/chessmonger/variants/basic.rb",
-    "lib/chessmonger/variants/international/chess_king.rb",
-    "lib/chessmonger/variants/international/chess_pawn.rb",
+    "lib/chessmonger/variants/international/king.rb",
+    "lib/chessmonger/variants/international/pawn.rb",
     "lib/chessmonger/variants/international/rules.rb",
-    "spec/core/armory_spec.rb",
-    "spec/core/rules_spec.rb",
+    "spec/compound_spec.rb",
+    "spec/config/armory_spec.rb",
+    "spec/config/behaviors_spec.rb",
+    "spec/config/config_spec.rb",
+    "spec/config/notation_spec.rb",
+    "spec/config/variant_spec.rb",
     "spec/engine/action_spec.rb",
     "spec/engine/board_spec.rb",
     "spec/engine/direction_spec.rb",
@@ -58,10 +70,13 @@ Gem::Specification.new do |s|
     "spec/engine/player_spec.rb",
     "spec/engine/position_spec.rb",
     "spec/helper.rb",
-    "spec/io/cmgn_spec.rb",
+    "spec/notations/cmgn_spec.rb",
+    "spec/rulebook/book_spec.rb",
+    "spec/rulebook/letter_serializer_spec.rb",
+    "spec/rulebook/rules_serializer_spec.rb",
     "spec/variants/abstract_spec.rb",
-    "spec/variants/international/chess_king_spec.rb",
-    "spec/variants/international/chess_pawn_spec.rb",
+    "spec/variants/international/king_spec.rb",
+    "spec/variants/international/pawn_spec.rb",
     "spec/variants/international/rules_spec.rb",
     "spec/version_spec.rb"
   ]

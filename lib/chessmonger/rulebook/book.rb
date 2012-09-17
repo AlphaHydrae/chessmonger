@@ -16,19 +16,32 @@ module Chessmonger
       game
     end
 
+    def new_notation name, variant_name
+      notation = @config.notation name
+      variant = @config.variant variant_name
+      notation.implementation.new.tap do |n|
+        n.rules_serializer = RulesSerializer.new self
+        n.piece_serializer = LetterSerializer.new variant
+      end
+    end
+
     def load!
       @config.configure do
         
         behaviors do
-          add 'ChessPawn', Chessmonger::Variants::InternationalChess::Pawn, :letter => 'p'
-          add 'ChessKing', Chessmonger::Variants::InternationalChess::King, :letter => 'k'
+          add 'ChessPawn', Variants::InternationalChess::Pawn, :letter => 'p'
+          add 'ChessKing', Variants::InternationalChess::King, :letter => 'k'
         end
 
-        variant 'InternationalChess', Chessmonger::Variants::InternationalChess.new do
+        variant 'InternationalChess', Variants::InternationalChess.new do
           armory do
             use 'ChessPawn'
             use 'ChessKing'
           end
+        end
+
+        notation 'cmgn', Notations::CMGN do
+          variants 'InternationalChess'
         end
       end
     end

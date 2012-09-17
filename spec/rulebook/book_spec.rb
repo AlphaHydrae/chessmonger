@@ -27,6 +27,13 @@ describe 'Rulebook' do
       lambda{ @rulebook.new_game 'Fubar', [] }.should raise_error(ArgumentError)
     end
 
+    it "should create a notation instance" do
+      p1, p2 = Chessmonger::Player.new('John Doe'), Chessmonger::Player.new('Jane Doe')
+      game = @rulebook.new_game 'InternationalChess', [ p1, p2 ]
+      notation = @rulebook.new_notation 'cmgn', 'InternationalChess'
+      lambda{ notation.save game }.should_not raise_error
+    end
+
     [
       {
         :name => 'InternationalChess',

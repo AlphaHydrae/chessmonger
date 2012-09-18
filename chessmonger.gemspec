@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "chessmonger"
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
-  s.date = "2012-09-17"
+  s.date = "2012-09-18"
   s.description = "Extensible grid game engine in Ruby."
   s.email = "hydrae.alpha@gmail.com"
   s.extra_rdoc_files = [

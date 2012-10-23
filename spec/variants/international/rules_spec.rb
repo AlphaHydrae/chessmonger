@@ -52,7 +52,7 @@ describe 'InternationalChess' do
 
     # rank 8
     #8.times{ |i| board.get(board.pos(i + 1, 1)).player.should be(@game.players[1]) }
-    board.get(board.pos(4, 8)).behavior.should be_a_kind_of(Chessmonger::Variants::InternationalChess::King)
+    board.get(board.pos(5, 8)).behavior.should be_a_kind_of(Chessmonger::Variants::InternationalChess::King)
   end
 
   it "should allow the starting setup" do

@@ -17,7 +17,7 @@ module Chessmonger
 
         king = King.new
         board.put Piece.new(king, game.players[0]), board.pos(5, 1)
-        board.put Piece.new(king, game.players[1]), board.pos(4, 8)
+        board.put Piece.new(king, game.players[1]), board.pos(5, 8)
       end
 
       def allowed? game, player
